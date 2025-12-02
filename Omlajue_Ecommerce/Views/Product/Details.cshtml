@@ -1,0 +1,869 @@
+@model Omlajue_Ecommerce.Models.ViewModels.ProductDetailViewModel
+@{
+    ViewBag.Title = Model.Product.ProductName;
+}
+
+@section styles {
+    <link href="~/Content/css/luxury-redesign.css?v=1.0" rel="stylesheet" />
+    <style>
+        /* ============================================
+           LUXURY PRODUCT DETAILS PAGE REDESIGN
+           Premium, Modern, High-End Design
+        ============================================ */
+        
+        :root {
+            --luxury-black: #0D0D0D;
+            --matte-black: #111111;
+            --dark-charcoal: #1A1A1A;
+            --luxury-gold: #D4AF37;
+            --gold-hover: #F4D03F;
+            --soft-white: #F8F8F8;
+            --border-subtle: rgba(212, 175, 55, 0.2);
+            --shadow-luxury: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+        
+        /* Main Container */
+        .luxury-product-container {
+            background: linear-gradient(135deg, var(--luxury-black) 0%, var(--matte-black) 100%);
+            min-height: 100vh;
+            padding: 80px 0;
+        }
+        
+        .luxury-product-wrapper {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+        
+        /* Product Grid Layout */
+        .luxury-product-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: start;
+        }
+        
+        /* ============================================
+           IMAGE GALLERY SECTION - LEFT SIDE
+        ============================================ */
+        
+        .luxury-image-section {
+            position: sticky;
+            top: 100px;
+        }
+        
+        .luxury-main-image-container {
+            background: var(--dark-charcoal);
+            border-radius: 20px;
+            padding: 60px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-luxury);
+            border: 1px solid var(--border-subtle);
+            overflow: hidden;
+            position: relative;
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .luxury-main-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: zoom-in;
+        }
+        
+        .luxury-main-image:hover {
+            transform: scale(1.08);
+        }
+        
+        /* Image Thumbnails */
+        .luxury-thumbnails {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 15px;
+        }
+        
+        .luxury-thumbnail {
+            background: var(--dark-charcoal);
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .luxury-thumbnail:hover {
+            border-color: var(--luxury-gold);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.3);
+        }
+        
+        .luxury-thumbnail.active {
+            border-color: var(--luxury-gold);
+            background: rgba(212, 175, 55, 0.1);
+        }
+        
+        .luxury-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        /* ============================================
+           PRODUCT INFO SECTION - RIGHT SIDE
+        ============================================ */
+        
+        .luxury-info-section {
+            color: var(--soft-white);
+        }
+        
+        /* Breadcrumb */
+        .luxury-breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 30px;
+            letter-spacing: 0.5px;
+        }
+        
+        .luxury-breadcrumb a {
+            color: #888;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .luxury-breadcrumb a:hover {
+            color: var(--luxury-gold);
+        }
+        
+        .luxury-breadcrumb i {
+            font-size: 0.7rem;
+        }
+        
+        /* Brand Badge */
+        .luxury-brand-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(212, 175, 55, 0.05) 100%);
+            border: 1px solid var(--border-subtle);
+            border-radius: 50px;
+            padding: 8px 20px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--luxury-gold);
+            margin-bottom: 20px;
+        }
+        
+        .luxury-brand-badge i {
+            font-size: 0.9rem;
+        }
+        
+        /* Product Title */
+        .luxury-product-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            line-height: 1.2;
+            color: var(--soft-white);
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
+        }
+        
+        /* SKU */
+        .luxury-sku {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            color: #666;
+            letter-spacing: 1px;
+            margin-bottom: 30px;
+        }
+        
+        /* Price Section */
+        .luxury-price-container {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(212, 175, 55, 0.05) 100%);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .luxury-price-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #888;
+            margin-bottom: 10px;
+        }
+        
+        .luxury-price-main {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--luxury-gold);
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+        
+        .luxury-price-original {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.5rem;
+            color: #666;
+            text-decoration: line-through;
+            margin-left: 15px;
+        }
+        
+        .luxury-discount-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-top: 12px;
+        }
+        
+        /* Stock Indicator */
+        .luxury-stock-indicator {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            color: #28a745;
+            margin-bottom: 40px;
+        }
+        
+        .luxury-stock-indicator i {
+            font-size: 1.1rem;
+        }
+        
+        .luxury-stock-indicator.out-of-stock {
+            color: #dc3545;
+        }
+        
+        /* Quantity Selector */
+        .luxury-quantity-section {
+            margin-bottom: 30px;
+        }
+        
+        .luxury-quantity-label {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--soft-white);
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .luxury-quantity-selector {
+            display: inline-flex;
+            align-items: center;
+            background: var(--dark-charcoal);
+            border: 1px solid var(--border-subtle);
+            border-radius: 50px;
+            padding: 8px;
+            gap: 5px;
+        }
+        
+        .luxury-qty-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: transparent;
+            border: 1px solid var(--border-subtle);
+            color: var(--luxury-gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+        
+        .luxury-qty-btn:hover {
+            background: var(--luxury-gold);
+            border-color: var(--luxury-gold);
+            color: var(--luxury-black);
+            transform: scale(1.05);
+        }
+        
+        .luxury-qty-input {
+            width: 80px;
+            height: 45px;
+            background: transparent;
+            border: none;
+            color: var(--soft-white);
+            text-align: center;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        /* Action Buttons */
+        .luxury-action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+        
+        .luxury-btn-primary {
+            flex: 1;
+            padding: 20px 40px;
+            background: linear-gradient(135deg, var(--luxury-gold) 0%, var(--gold-hover) 100%);
+            color: var(--luxury-black);
+            border: none;
+            border-radius: 50px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        
+        .luxury-btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(212, 175, 55, 0.6);
+            background: linear-gradient(135deg, var(--gold-hover) 0%, var(--luxury-gold) 100%);
+        }
+        
+        .luxury-btn-primary:active {
+            transform: translateY(-1px);
+        }
+        
+        .luxury-btn-wishlist {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            background: var(--dark-charcoal);
+            border: 2px solid var(--border-subtle);
+            color: var(--luxury-gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+        
+        .luxury-btn-wishlist:hover {
+            background: #dc3545;
+            border-color: #dc3545;
+            color: white;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(220, 53, 69, 0.5);
+        }
+        
+        /* Features Section */
+        .luxury-features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 50px;
+        }
+        
+        .luxury-feature-item {
+            background: var(--dark-charcoal);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .luxury-feature-item:hover {
+            border-color: var(--luxury-gold);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.2);
+        }
+        
+        .luxury-feature-item i {
+            font-size: 1.8rem;
+            color: var(--luxury-gold);
+            margin-bottom: 10px;
+        }
+        
+        .luxury-feature-item p {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            color: #ccc;
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Description Section */
+        .luxury-description-section {
+            margin-bottom: 40px;
+        }
+        
+        .luxury-section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--soft-white);
+            margin-bottom: 20px;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--border-subtle);
+            padding-bottom: 15px;
+        }
+        
+        .luxury-description-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #ccc;
+            letter-spacing: 0.3px;
+        }
+        
+        /* Specifications */
+        .luxury-specs-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        
+        .luxury-spec-item {
+            background: var(--dark-charcoal);
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            padding: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .luxury-spec-item:hover {
+            border-color: var(--luxury-gold);
+            transform: translateX(5px);
+        }
+        
+        .luxury-spec-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            color: #888;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .luxury-spec-value {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.95rem;
+            color: var(--soft-white);
+            font-weight: 600;
+        }
+        
+        /* ============================================
+           RESPONSIVE DESIGN
+        ============================================ */
+        
+        @@media (max-width: 1024px) {
+            .luxury-product-grid {
+                grid-template-columns: 1fr;
+                gap: 50px;
+            }
+            
+            .luxury-image-section {
+                position: relative;
+                top: 0;
+            }
+            
+            .luxury-product-title {
+                font-size: 2.5rem;
+            }
+            
+            .luxury-price-main {
+                font-size: 3rem;
+            }
+        }
+        
+        @@media (max-width: 768px) {
+            .luxury-product-wrapper {
+                padding: 0 20px;
+            }
+            
+            .luxury-product-container {
+                padding: 40px 0;
+            }
+            
+            .luxury-main-image-container {
+                padding: 40px;
+            }
+            
+            .luxury-product-title {
+                font-size: 2rem;
+            }
+            
+            .luxury-price-main {
+                font-size: 2.5rem;
+            }
+            
+            .luxury-action-buttons {
+                flex-direction: column;
+            }
+            
+            .luxury-btn-wishlist {
+                width: 100%;
+                height: 60px;
+                border-radius: 50px;
+            }
+            
+            .luxury-features {
+                grid-template-columns: 1fr;
+            }
+            
+            .luxury-specs-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Animations */
+        @@keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .luxury-info-section > * {
+            animation: fadeInUp 0.6s ease forwards;
+            opacity: 0;
+        }
+        
+        .luxury-info-section > *:nth-child(1) { animation-delay: 0.1s; }
+        .luxury-info-section > *:nth-child(2) { animation-delay: 0.2s; }
+        .luxury-info-section > *:nth-child(3) { animation-delay: 0.3s; }
+        .luxury-info-section > *:nth-child(4) { animation-delay: 0.4s; }
+        .luxury-info-section > *:nth-child(5) { animation-delay: 0.5s; }
+        .luxury-info-section > *:nth-child(6) { animation-delay: 0.6s; }
+        .luxury-info-section > *:nth-child(7) { animation-delay: 0.7s; }
+        .luxury-info-section > *:nth-child(8) { animation-delay: 0.8s; }
+    </style>
+}
+
+<!-- Luxury Product Details Container -->
+<div class="luxury-product-container">
+    <div class="luxury-product-wrapper">
+        <div class="luxury-product-grid">
+            
+            <!-- LEFT SIDE: Image Gallery -->
+            <div class="luxury-image-section">
+                <div class="luxury-main-image-container">
+                    @if (Model.Product.ProductImages != null && Model.Product.ProductImages.Any())
+                    {
+                        var primaryImage = Model.Product.ProductImages.FirstOrDefault(i => i.IsPrimary);
+                        <img src="@(primaryImage != null ? primaryImage.ImageUrl : "/Content/images/placeholder.jpg")" 
+                             alt="@Model.Product.ProductName" 
+                             class="luxury-main-image" 
+                             id="mainImage" />
+                    }
+                    else
+                    {
+                        <img src="/Content/images/placeholder.jpg" 
+                             alt="@Model.Product.ProductName" 
+                             class="luxury-main-image" 
+                             id="mainImage" />
+                    }
+                </div>
+                
+                @if (Model.Product.ProductImages != null && Model.Product.ProductImages.Count > 1)
+                {
+                    <div class="luxury-thumbnails">
+                        @foreach (var image in Model.Product.ProductImages)
+                        {
+                            <div class="luxury-thumbnail @(image.IsPrimary ? "active" : "")" 
+                                 onclick="changeImage('@image.ImageUrl', this)">
+                                <img src="@image.ImageUrl" alt="@Model.Product.ProductName" />
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+            
+            <!-- RIGHT SIDE: Product Information -->
+            <div class="luxury-info-section">
+                
+                <!-- Breadcrumb -->
+                <div class="luxury-breadcrumb">
+                    <a href="@Url.Action("Index", "Home")">Home</a>
+                    <i class="fas fa-chevron-right"></i>
+                    <a href="@Url.Action("List", "Product")">Products</a>
+                    <i class="fas fa-chevron-right"></i>
+                    <span>@Model.Product.ProductName</span>
+                </div>
+                
+                <!-- Brand Badge -->
+                <div class="luxury-brand-badge">
+                    <i class="fas fa-crown"></i>
+                    @Model.Product.Brand.BrandName
+                </div>
+                
+                <!-- Product Title -->
+                <h1 class="luxury-product-title">@Model.Product.ProductName</h1>
+                
+                <!-- SKU -->
+                <div class="luxury-sku">SKU: @Model.Product.SKU</div>
+                
+                <!-- Price Section -->
+                <div class="luxury-price-container">
+                    <div class="luxury-price-label">Price</div>
+                    @if (Model.Product.DiscountPrice.HasValue)
+                    {
+                        <div>
+                            <span class="luxury-price-main">?@Model.Product.DiscountPrice.Value.ToString("N0")</span>
+                            <span class="luxury-price-original">?@Model.Product.Price.ToString("N0")</span>
+                        </div>
+                        var discount = ((Model.Product.Price - Model.Product.DiscountPrice.Value) / Model.Product.Price * 100);
+                        <div class="luxury-discount-badge">
+                            SAVE @discount.ToString("F0")%
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="luxury-price-main">?@Model.Product.Price.ToString("N0")</div>
+                    }
+                </div>
+                
+                <!-- Stock Indicator -->
+                @if (Model.Product.StockQuantity > 0)
+                {
+                    <div class="luxury-stock-indicator">
+                        <i class="fas fa-check-circle"></i>
+                        <span><strong>In Stock</strong> - @Model.Product.StockQuantity units available</span>
+                    </div>
+                }
+                else
+                {
+                    <div class="luxury-stock-indicator out-of-stock">
+                        <i class="fas fa-times-circle"></i>
+                        <span><strong>Out of Stock</strong></span>
+                    </div>
+                }
+                
+                <!-- Quantity Selector -->
+                @if (Model.Product.StockQuantity > 0)
+                {
+                    <div class="luxury-quantity-section">
+                        <label class="luxury-quantity-label">Quantity</label>
+                        <div class="luxury-quantity-selector">
+                            <button class="luxury-qty-btn" onclick="decrementQty()">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <input type="number" class="luxury-qty-input" id="productQuantity" value="1" min="1" max="@Model.Product.StockQuantity" readonly />
+                            <button class="luxury-qty-btn" onclick="incrementQty(@Model.Product.StockQuantity)">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                }
+                
+                <!-- Action Buttons -->
+                <div class="luxury-action-buttons">
+                    @if (Model.Product.StockQuantity > 0)
+                    {
+                        <button class="luxury-btn-primary" onclick="addToCart(@Model.Product.ProductId)">
+                            <i class="fas fa-shopping-bag"></i>
+                            <span>Add to Cart</span>
+                        </button>
+                        <button class="luxury-btn-wishlist" onclick="addToWishlist(@Model.Product.ProductId)" title="Add to Wishlist">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                    }
+                    else
+                    {
+                        <button class="luxury-btn-primary" disabled style="opacity: 0.5; cursor: not-allowed;">
+                            <i class="fas fa-times-circle"></i>
+                            <span>Out of Stock</span>
+                        </button>
+                    }
+                </div>
+                
+                <!-- Features -->
+                <div class="luxury-features">
+                    <div class="luxury-feature-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <p>Authentic Guarantee</p>
+                    </div>
+                    <div class="luxury-feature-item">
+                        <i class="fas fa-truck"></i>
+                        <p>Free Shipping</p>
+                    </div>
+                    <div class="luxury-feature-item">
+                        <i class="fas fa-undo-alt"></i>
+                        <p>Easy Returns</p>
+                    </div>
+                </div>
+                
+                <!-- Description -->
+                <div class="luxury-description-section">
+                    <h2 class="luxury-section-title">Description</h2>
+                    <p class="luxury-description-text">@Model.Product.Description</p>
+                </div>
+                
+                <!-- Specifications -->
+                @if (!string.IsNullOrEmpty(Model.Product.Specifications))
+                {
+                    <div class="luxury-description-section">
+                        <h2 class="luxury-section-title">Specifications</h2>
+                        <div class="luxury-description-text">
+                            @Html.Raw(Model.Product.Specifications.Replace("\n", "<br />"))
+                        </div>
+                    </div>
+                }
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let currentQty = 1;
+        
+        function incrementQty(maxQty) {
+            if (currentQty < maxQty) {
+                currentQty++;
+                $('#productQuantity').val(currentQty);
+            } else {
+                showLuxuryNotification('Maximum stock limit reached', 'warning');
+            }
+        }
+        
+        function decrementQty() {
+            if (currentQty > 1) {
+                currentQty--;
+                $('#productQuantity').val(currentQty);
+            }
+        }
+        
+        function changeImage(imageUrl, element) {
+            $('#mainImage').css('opacity', '0');
+            
+            setTimeout(function() {
+                $('#mainImage').attr('src', imageUrl);
+                $('#mainImage').css('opacity', '1');
+            }, 200);
+            
+            $('.luxury-thumbnail').removeClass('active');
+            $(element).addClass('active');
+        }
+        
+        function addToCart(productId) {
+            const quantity = parseInt($('#productQuantity').val()) || 1;
+            
+            $.post('@Url.Action("Add", "Cart")', { productId: productId, quantity: quantity }, function(result) {
+                if (result.success) {
+                    showLuxuryNotification('Product added to cart successfully!', 'success');
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1500);
+                } else {
+                    showLuxuryNotification(result.message || 'Failed to add to cart', 'error');
+                }
+            }).fail(function() {
+                showLuxuryNotification('An error occurred. Please try again.', 'error');
+            });
+        }
+        
+        function addToWishlist(productId) {
+            $.post('@Url.Action("Add", "Wishlist")', { productId: productId }, function(result) {
+                if (result.success) {
+                    showLuxuryNotification('Added to wishlist!', 'success');
+                } else {
+                    showLuxuryNotification(result.message || 'Failed to add to wishlist', 'error');
+                }
+            }).fail(function() {
+                showLuxuryNotification('An error occurred. Please try again.', 'error');
+            });
+        }
+        
+        function showLuxuryNotification(message, type) {
+            const bgColor = type === 'success' ? 'linear-gradient(135deg, #28a745, #20c997)' : 
+                           type === 'warning' ? 'linear-gradient(135deg, #D4AF37, #F4D03F)' : 
+                           'linear-gradient(135deg, #dc3545, #c82333)';
+            
+            const icon = type === 'success' ? 'check-circle' : 
+                        type === 'warning' ? 'exclamation-triangle' : 
+                        'times-circle';
+            
+            const notification = $('<div>')
+                .css({
+                    position: 'fixed',
+                    top: '100px',
+                    right: '30px',
+                    padding: '20px 30px',
+                    background: bgColor,
+                    color: '#ffffff',
+                    borderRadius: '16px',
+                    boxShadow: '0 10px 40px rgba(0,0,0,0.5)',
+                    zIndex: 99999,
+                    opacity: 0,
+                    transform: 'translateX(400px)',
+                    transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+                    fontFamily: '"Montserrat", sans-serif',
+                    fontSize: '1rem',
+                    fontWeight: '600',
+                    letterSpacing: '0.5px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '15px',
+                    minWidth: '350px'
+                })
+                .html('<i class="fas fa-' + icon + '" style="font-size: 1.5rem;"></i>' + message);
+            
+            $('body').append(notification);
+            
+            setTimeout(function() {
+                notification.css({ opacity: 1, transform: 'translateX(0)' });
+            }, 10);
+            
+            setTimeout(function() {
+                notification.css({ opacity: 0, transform: 'translateX(400px)' });
+                setTimeout(function() {
+                    notification.remove();
+                }, 500);
+            }, 4000);
+        }
+        
+        // Image zoom effect on hover
+        $(document).ready(function() {
+            $('.luxury-main-image').on('mouseenter', function() {
+                $(this).css('cursor', 'zoom-in');
+            });
+        });
+    </script>
+}

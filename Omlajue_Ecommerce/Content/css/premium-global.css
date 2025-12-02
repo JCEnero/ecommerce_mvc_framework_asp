@@ -1,0 +1,355 @@
+/* Premium Global Design System - Luxury E-Commerce */
+
+:root {
+    /* Premium Dark Palette */
+    --primary-black: #0D0D0D;
+    --secondary-black: #111111;
+    --tertiary-black: #1A1A1A;
+    --card-background: linear-gradient(135deg, #1a1a1a 0%, #141414 100%);
+    
+    /* Luxury Gold Accent */
+    --gold-primary: #C9A961;
+    --gold-secondary: #A08849;
+    --gold-gradient: linear-gradient(135deg, #C9A961 0%, #A08849 100%);
+    
+    /* Silver Accent (Alternative) */
+    --silver-primary: #B8B8B8;
+    --silver-secondary: #8E8E8E;
+    
+    /* Text Colors */
+    --text-primary: #FFFFFF;
+    --text-secondary: #999999;
+    --text-muted: #666666;
+    --text-disabled: #444444;
+    
+    /* Border & Dividers */
+    --border-light: #252525;
+    --border-medium: #2A2A2A;
+    --border-heavy: #3A3A3A;
+    
+    /* Interactive States */
+    --hover-bg: #2A2A2A;
+    --active-bg: #0F0F0F;
+    --focus-ring: rgba(201, 169, 97, 0.3);
+    
+    /* Shadows */
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.5);
+    --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.6);
+    --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.8);
+    --shadow-gold: 0 4px 20px rgba(201, 169, 97, 0.3);
+    
+    /* Typography */
+    --font-heading: 'Poppins', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-accent: 'Montserrat', sans-serif;
+    
+    /* Spacing */
+    --spacing-xs: 8px;
+    --spacing-sm: 12px;
+    --spacing-md: 20px;
+    --spacing-lg: 30px;
+    --spacing-xl: 40px;
+    --spacing-2xl: 60px;
+    
+    /* Border Radius */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-pill: 50px;
+    --radius-circle: 50%;
+    
+    /* Transitions */
+    --transition-fast: 0.2s ease;
+    --transition-base: 0.3s ease;
+    --transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Global Reset & Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--primary-black);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Premium Typography System */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 300;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+}
+
+h1 { font-size: 3rem; font-weight: 700; }
+h2 { font-size: 2.5rem; font-weight: 300; }
+h3 { font-size: 2rem; font-weight: 400; }
+h4 { font-size: 1.5rem; font-weight: 400; }
+h5 { font-size: 1.25rem; font-weight: 500; }
+h6 { font-size: 1rem; font-weight: 500; }
+
+/* Premium Button System */
+.btn-premium {
+    padding: 16px 50px;
+    border: none;
+    border-radius: var(--radius-pill);
+    background: var(--gold-gradient);
+    color: #000000;
+    font-family: var(--font-heading);
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    box-shadow: var(--shadow-gold);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-premium::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: var(--radius-circle);
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn-premium:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.btn-premium:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 30px rgba(201, 169, 97, 0.5);
+}
+
+.btn-premium:active {
+    transform: translateY(0);
+}
+
+.btn-premium span {
+    position: relative;
+    z-index: 1;
+}
+
+/* Secondary Button */
+.btn-secondary {
+    padding: 14px 40px;
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-pill);
+    background: transparent;
+    color: var(--text-primary);
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.btn-secondary:hover {
+    background: var(--hover-bg);
+    border-color: var(--gold-primary);
+    color: var(--gold-primary);
+    transform: translateY(-2px);
+}
+
+/* Premium Card System */
+.card-premium {
+    background: var(--card-background);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    border: 1px solid var(--border-light);
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-slow);
+}
+
+.card-premium:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--border-medium);
+}
+
+/* Premium Input System */
+.input-premium {
+    width: 100%;
+    padding: 12px 16px;
+    background: var(--active-bg);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    transition: all var(--transition-base);
+}
+
+.input-premium:focus {
+    background: var(--tertiary-black);
+    border-color: var(--gold-primary);
+    outline: none;
+    box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+.input-premium::placeholder {
+    color: var(--text-muted);
+}
+
+/* Premium Badge System */
+.badge-premium {
+    display: inline-block;
+    padding: 6px 16px;
+    background: var(--gold-gradient);
+    color: #000000;
+    font-family: var(--font-accent);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    border-radius: var(--radius-pill);
+}
+
+.badge-secondary {
+    background: var(--tertiary-black);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-light);
+}
+
+/* Premium Divider */
+.divider-premium {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border-light), transparent);
+    margin: var(--spacing-lg) 0;
+}
+
+/* Gold Accent Line */
+.accent-line {
+    width: 80px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
+    margin: 0 auto;
+}
+
+/* Container System */
+.container-premium {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+}
+
+/* Section Spacing */
+.section-premium {
+    padding: var(--spacing-2xl) 0;
+}
+
+/* Text Utilities */
+.text-gold {
+    color: var(--gold-primary);
+}
+
+.text-muted {
+    color: var(--text-muted);
+}
+
+.text-secondary {
+    color: var(--text-secondary);
+}
+
+/* Hover Effects */
+.hover-lift {
+    transition: transform var(--transition-base);
+}
+
+.hover-lift:hover {
+    transform: translateY(-4px);
+}
+
+.hover-glow {
+    transition: box-shadow var(--transition-base);
+}
+
+.hover-glow:hover {
+    box-shadow: var(--shadow-gold);
+}
+
+/* Loading Animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+/* Glassmorphism Effect */
+.glass-effect {
+    background: rgba(26, 26, 26, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--border-light);
+}
+
+/* Gradient Text */
+.text-gradient-gold {
+    background: var(--gold-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Premium Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--primary-black);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--tertiary-black);
+    border-radius: var(--radius-sm);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--hover-bg);
+}
+
+/* Responsive Typography */
+@media (max-width: 768px) {
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.75rem; }
+    h3 { font-size: 1.5rem; }
+    h4 { font-size: 1.25rem; }
+}
+
+/* Print Styles */
+@media print {
+    body {
+        background: white;
+        color: black;
+    }
+}

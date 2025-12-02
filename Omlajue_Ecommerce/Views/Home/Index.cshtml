@@ -1,0 +1,830 @@
+﻿@model Omlajue_Ecommerce.Models.ViewModels.HomeViewModel
+@{
+    ViewBag.Title = "Home";
+    var isLoggedIn = Model.IsLoggedIn;
+}
+
+@if (!isLoggedIn)
+{
+    <!-- Hero Section for Guest Users -->
+    <section class="hero-section" style="background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); position: relative; min-height: 68vh; display: flex; align-items: center; justify-content: center;">
+        <div class="hero-overlay" style="position: absolute; inset: 0; background: url('/Content/images/banners/watchbg.png') center/cover; opacity: 0.75;"></div>
+        <div class="container position-relative" style="z-index: 10;">
+            <div class="row align-items-center">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="hero-title mb-3" style="font-size: 3.75rem; font-weight: 700; color: #ffffff; letter-spacing: -0.01em;">
+                        Timeless Elegance
+                    </h1>
+                    <p class="hero-subtitle mb-4" style="font-size: 1.1rem; color: #b0b0b0; font-weight: 400; letter-spacing: 0.02em; max-width: 600px; margin: 0 auto;">
+                        Explore the Craft, Legacy, and Excellence of World-Class Timepieces
+                    </p>
+                    <a href="@Url.Action("Login", "Account")" class="btn btn-primary btn-lg px-4 py-2" style="border-radius: 6px; font-weight: 500; letter-spacing: 0.3px; font-size: 1rem;">
+                        See Collection
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Brands Section -->
+    <section class="py-5" style="background: #0d0d0d;">
+        <div class="container">
+            <div class="text-center mb-4">
+                <h2 style="font-size: 1.65rem; font-weight: 500; color: #ffffff; margin-bottom: 0.5rem; letter-spacing: 0.02em;">
+                    Popular Brands
+                </h2>
+            </div>
+            
+            @if (Model.Brands != null && Model.Brands.Any())
+            {
+                <div class="row g-2 mb-3">
+                    @foreach (var brand in Model.Brands.Take(12))
+                    {
+                        <div class="col-lg-2 col-md-3 col-sm-4 col-6">
+                            <a href="@Url.Action("Login", "Account")" 
+                               class="brand-pill d-block text-center py-2 px-3" 
+                               style="background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 6px; color: #e0e0e0; text-decoration: none; transition: all 0.3s ease; font-weight: 400; letter-spacing: 0.3px; font-size: 0.9rem;">
+                                @brand.BrandName
+                            </a>
+                        </div>
+                    }
+                </div>
+            }
+            
+            <div class="text-center mt-3">
+                <a href="@Url.Action("Login", "Account")" class="btn btn-outline-light px-4 py-2" style="border-radius: 6px; font-weight: 400; letter-spacing: 0.3px; border-width: 1px; font-size: 0.95rem;">
+                    Display All Brands
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Most Popular Models Section for Guest Users -->
+    <section class="py-5" style="background: #0d0d0d;">
+        <div class="container">
+            <div class="text-center mb-4">
+                <h2 style="font-size: 1.65rem; font-weight: 500; color: #ffffff; margin-bottom: 0.5rem; letter-spacing: 0.02em;">
+                    Our Most Popular Models
+                </h2>
+            </div>
+            
+            <div class="row g-3">
+                @if (Model.FeaturedProducts != null && Model.FeaturedProducts.Any())
+                {
+                    foreach (var product in Model.FeaturedProducts)
+                    {
+                        var primaryImage = product.ProductImages.FirstOrDefault(i => i.IsPrimary)?.ImageUrl ?? "/Content/images/placeholder-watch.jpg";
+                        
+                        <div class="col-lg-3 col-md-6">
+                            <div class="model-card" style="background: #0f0f0f; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.5); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); height: 100%; position: relative;">
+                                <a href="@Url.Action("Login", "Account")" style="text-decoration: none; color: inherit; display: block;">
+                                    <div class="model-image" style="position: relative; overflow: hidden; aspect-ratio: 1; background: #080808; padding: 30px;">
+                                        <div style="position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+                                            <img src="@primaryImage" alt="@product.ProductName" 
+                                                 style="max-width: 85%; max-height: 85%; object-fit: contain; transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); filter: brightness(0.9);">
+                                        </div>
+                                    </div>
+                                    <div class="model-info p-3" style="background: #0f0f0f; transition: background 0.3s ease;">
+                                        <div class="model-brand mb-1" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: #888; font-weight: 500;">
+                                            @product.Brand.BrandName
+                                        </div>
+                                        <h5 class="model-name" style="font-size: 1rem; font-weight: 500; color: #ffffff; line-height: 1.3; min-height: 2.4rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                                            @product.ProductName
+                                        </h5>
+                                    </div>
+                                </a>
+                                <div class="card-overlay" style="position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 100%); opacity: 0; transition: opacity 0.4s ease; pointer-events: none;"></div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Indicators Section -->
+    <section class="trust-section py-5" style="background: #0d0d0d;">
+        <div class="container">
+            <div class="text-center mb-4">
+                <h2 style="font-size: 1.65rem; font-weight: 500; color: #ffffff; margin-bottom: 0.5rem; letter-spacing: 0.02em;">
+                    The Leading Marketplace for Luxury Watches Since 2003
+                </h2>
+            </div>
+            <div class="row g-3">
+                <div class="col-lg-3 col-md-6">
+                    <div class="trust-card text-center p-3" style="background: #1a1a1a; border-radius: 10px; height: 100%; transition: all 0.3s ease;">
+                        <div class="trust-icon mb-2" style="font-size: 2.2rem; color: #ffffff;">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h3 class="trust-number" style="font-size: 1.35rem; font-weight: 600; color: #ffffff; margin-bottom: 0.25rem;">4.7 out of 5 stars</h3>
+                        <p class="trust-text" style="color: #888; margin: 0; font-size: 0.85rem;">from 186,000 reviews worldwide</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="trust-card text-center p-3" style="background: #1a1a1a; border-radius: 10px; height: 100%; transition: all 0.3s ease;">
+                        <div class="trust-icon mb-2" style="font-size: 2.2rem; color: #ffffff;">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3 class="trust-number" style="font-size: 1.35rem; font-weight: 600; color: #ffffff; margin-bottom: 0.25rem;">9 million</h3>
+                        <p class="trust-text" style="color: #888; margin: 0; font-size: 0.85rem;">watch enthusiasts use Omlajue each month</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="trust-card text-center p-3" style="background: #1a1a1a; border-radius: 10px; height: 100%; transition: all 0.3s ease;">
+                        <div class="trust-icon mb-2" style="font-size: 2.2rem; color: #ffffff;">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3 class="trust-number" style="font-size: 1.35rem; font-weight: 600; color: #ffffff; margin-bottom: 0.25rem;">Over 200,000</h3>
+                        <p class="trust-text" style="color: #888; margin: 0; font-size: 0.85rem;">customers choose Buyer Protection annually</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="trust-card text-center p-3" style="background: #1a1a1a; border-radius: 10px; height: 100%; transition: all 0.3s ease;">
+                        <div class="trust-icon mb-2" style="font-size: 2.2rem; color: #ffffff;">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h3 class="trust-number" style="font-size: 1.35rem; font-weight: 600; color: #ffffff; margin-bottom: 0.25rem;">More than 25,000</h3>
+                        <p class="trust-text" style="color: #888; margin: 0; font-size: 0.85rem;">trustworthy sellers</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us Section -->
+    <section class="py-5" style="background: #0d0d0d;">
+        <div class="container">
+            <div class="text-center mb-4">
+                <h2 style="font-size: 1.65rem; font-weight: 500; color: #ffffff; margin-bottom: 0.5rem; letter-spacing: 0.02em;">
+                    Why Choose Omlajue
+                </h2>
+            </div>
+            
+            <div class="row g-3">
+                <div class="col-lg-3 col-md-6">
+                    <div class="feature-card text-center p-3" style="background: #1a1a1a; border-radius: 10px; height: 100%; transition: all 0.3s ease;">
+                        <div class="feature-icon mb-2" style="width: 65px; height: 65px; border-radius: 50%; background: #2a2a2a; color: #ffffff; display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 1.6rem;">
+                            <i class="fas fa-certificate"></i>
+                        </div>
+                        <h5 class="feature-title mb-2" style="font-size: 1.05rem; font-weight: 500; color: #ffffff;">100% Authentic</h5>
+                        <p class="feature-text" style="color: #888; margin: 0; font-size: 0.85rem;">Every timepiece is verified for authenticity</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="feature-card text-center p-3" style="background: #1a1a1a; border-radius: 10px; height: 100%; transition: all 0.3s ease;">
+                        <div class="feature-icon mb-2" style="width: 65px; height: 65px; border-radius: 50%; background: #2a2a2a; color: #ffffff; display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 1.6rem;">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h5 class="feature-title mb-2" style="font-size: 1.05rem; font-weight: 500; color: #ffffff;">Buyer Protection</h5>
+                        <p class="feature-text" style="color: #888; margin: 0; font-size: 0.85rem;">Your purchase is protected and insured</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="feature-card text-center p-3" style="background: #1a1a1a; border-radius: 10px; height: 100%; transition: all 0.3s ease;">
+                        <div class="feature-icon mb-2" style="width: 65px; height: 65px; border-radius: 50%; background: #2a2a2a; color: #ffffff; display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 1.6rem;">
+                            <i class="fas fa-shipping-fast"></i>
+                        </div>
+                        <h5 class="feature-title mb-2" style="font-size: 1.05rem; font-weight: 500; color: #ffffff;">Secure Shipping</h5>
+                        <p class="feature-text" style="color: #888; margin: 0; font-size: 0.85rem;">Fast and insured worldwide delivery</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="feature-card text-center p-3" style="background: #1a1a1a; border-radius: 10px; height: 100%; transition: all 0.3s ease;">
+                        <div class="feature-icon mb-2" style="width: 65px; height: 65px; border-radius: 50%; background: #2a2a2a; color: #ffffff; display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 1.6rem;">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <h5 class="feature-title mb-2" style="font-size: 1.05rem; font-weight: 500; color: #ffffff;">Expert Support</h5>
+                        <p class="feature-text" style="color: #888; margin: 0; font-size: 0.85rem;">Professional assistance from watch specialists</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA for Guest Users -->
+    <section class="cta-section py-5" style="background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 100%);">
+        <div class="container">
+            <div class="text-center py-4">
+                <h2 class="mb-3" style="font-size: 1.85rem; font-weight: 600; color: #ffffff;">
+                    Join Omlajue Today
+                </h2>
+                <p class="mb-4" style="font-size: 1rem; color: #888; max-width: 600px; margin: 0 auto;">
+                    Get access to exclusive prices, save your favorites, and connect with trusted sellers
+                </p>
+                <div class="d-flex gap-2 justify-content-center flex-wrap">
+                    <a href="@Url.Action("Register", "Account")" class="btn btn-primary px-4 py-2" style="border-radius: 6px; font-weight: 500; letter-spacing: 0.3px; font-size: 0.95rem;">
+                        <i class="fas fa-user-plus me-2"></i>Create Account
+                    </a>
+                    <a href="@Url.Action("Login", "Account")" class="btn btn-outline-light px-4 py-2" style="border-radius: 6px; font-weight: 500; letter-spacing: 0.3px; border-width: 1px; font-size: 0.95rem;">
+                        <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                    </a>
+                </div>
+            </div }
+        </div>
+    </section>
+}
+else
+{
+    <!-- LOGGED IN USER - LUXURY HERO WITH SALE BANNER -->
+    
+    <!-- Luxury Hero Section with Sale -->
+    <section class="luxury-hero-section">
+        <div class="hero-background-image" style="background-image: url('/Content/images/banners/luxury-watch-bg.jpg');"></div>
+        <div class="hero-overlay"></div>
+        
+        <div class="hero-content-wrapper">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-7 animate-fade-in-up">
+                        <span class="hero-sale-badge">
+                            <i class="fas fa-bolt me-2"></i>Limited Time Offer
+                        </span>
+                        
+                        <h1 class="hero-main-title">
+                            Luxury Timepieces<br/>
+                            <span class="hero-highlight">Up to 40% Off</span>
+                        </h1>
+                        
+                        <p class="hero-subtitle">
+                            Discover our exclusive collection of authenticated luxury watches. 
+                            Premium craftsmanship meets unbeatable prices.
+                        </p>
+                        
+                        <div class="hero-sale-info">
+                            <div class="hero-discount-tag">
+                                <span class="discount-percentage">-40%</span>
+                                <span class="discount-label">Sale</span>
+                            </div>
+                            <div>
+                                <a href="#featured-deals" class="luxury-cta-button">
+                                    Shop Sale Now
+                                    <i class="fas fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Hero Product Image (Optional - can be replaced with actual product) -->
+            <div class="hero-product-preview d-none d-lg-block">
+                <img src="/Content/images/products/11.png" alt="Featured Luxury Watch" />
+            </div>
+        </div>
+    </section>
+
+    <!-- Filter Section -->
+    <section class="filter-section py-4" style="background: #0d0d0d; border-bottom: 1px solid #1a1a1a;">
+        <div class="container">
+            <form method="get" action="@Url.Action("Index", "Home")" id="filterForm">
+                <div class="row g-3 align-items-end">
+                    <!-- Search -->
+                    <div class="col-lg-3 col-md-6">
+                        <label style="font-size: 0.85rem; color: #888; margin-bottom: 0.5rem; display: block;">Search</label>
+                        <input type="text" name="search" value="@Model.SearchQuery" class="form-control" placeholder="Search products..." 
+                               style="background: #1a1a1a; border: 1px solid #2a2a2a; color: #e0e0e0; border-radius: 6px; padding: 8px 12px;">
+                    </div>
+                    
+                    <!-- Brand Filter -->
+                    <div class="col-lg-2 col-md-6">
+                        <label style="font-size: 0.85rem; color: #888; margin-bottom: 0.5rem; display: block;">Brand</label>
+                        <select name="brandId" class="form-control" style="background: #1a1a1a; border: 1px solid #2a2a2a; color: #e0e0e0; border-radius: 6px; padding: 8px 12px;">
+                            <option value="">All Brands</option>
+                            @foreach (var brand in Model.Brands)
+                            {
+                                <option value="@brand.BrandId" @(Model.SelectedBrandId == brand.BrandId ? "selected" : "")>@brand.BrandName</option>
+                            }
+                        </select>
+                    </div>
+                    
+                    <!-- Category Filter -->
+                    <div class="col-lg-2 col-md-6">
+                        <label style="font-size: 0.85rem; color: #888; margin-bottom: 0.5rem; display: block;">Category</label>
+                        <select name="categoryId" class="form-control" style="background: #1a1a1a; border: 1px solid #2a2a2a; color: #e0e0e0; border-radius: 6px; padding: 8px 12px;">
+                            <option value="">All Categories</option>
+                            @foreach (var category in Model.Categories)
+                            {
+                                <option value="@category.CategoryId" @(Model.SelectedCategoryId == category.CategoryId ? "selected" : "")>@category.CategoryName</option>
+                            }
+                        </select>
+                    </div>
+                    
+                    <!-- Gender Filter -->
+                    <div class="col-lg-2 col-md-6">
+                        <label style="font-size: 0.85rem; color: #888; margin-bottom: 0.5rem; display: block;">Gender</label>
+                        <select name="gender" class="form-control" style="background: #1a1a1a; border: 1px solid #2a2a2a; color: #e0e0e0; border-radius: 6px; padding: 8px 12px;">
+                            <option value="">All</option>
+                            <option value="Men" @(Model.SelectedGender == "Men" ? "selected" : "")>Men</option>
+                            <option value="Women" @(Model.SelectedGender == "Women" ? "selected" : "")>Women</option>
+                            <option value="Unisex" @(Model.SelectedGender == "Unisex" ? "selected" : "")>Unisex</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Sort By -->
+                    <div class="col-lg-2 col-md-6">
+                        <label style="font-size: 0.85rem; color: #888; margin-bottom: 0.5rem; display: block;">Sort By</label>
+                        <select name="sortBy" class="form-control" style="background: #1a1a1a; border: 1px solid #2a2a2a; color: #e0e0e0; border-radius: 6px; padding: 8px 12px;">
+                            <option value="newest" @(Model.SortBy == "newest" ? "selected" : "")>Newest</option>
+                            <option value="price-asc" @(Model.SortBy == "price-asc" ? "selected" : "")>Price: Low to High</option>
+                            <option value="price-desc" @(Model.SortBy == "price-desc" ? "selected" : "")>Price: High to Low</option>
+                            <option value="name" @(Model.SortBy == "name" ? "selected" : "")>Name A-Z</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Filter Button -->
+                    <div class="col-lg-1 col-md-6">
+                        <button type="submit" class="btn btn-primary w-100" style="border-radius: 6px; padding: 8px 12px;">
+                            <i class="fas fa-filter"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Price Range -->
+                <div class="row g-3 mt-2">
+                    <div class="col-lg-2 col-md-6">
+                        <label style="font-size: 0.85rem; color: #888; margin-bottom: 0.5rem; display: block;">Min Price</label>
+                        <input type="number" name="minPrice" value="@Model.MinPrice" class="form-control" placeholder="₱0" 
+                               style="background: #1a1a1a; border: 1px solid #2a2a2a; color: #e0e0e0; border-radius: 6px; padding: 8px 12px;">
+                    </div>
+                    <div class="col-lg-2 col-md-6">
+                        <label style="font-size: 0.85rem; color: #888; margin-bottom: 0.5rem; display: block;">Max Price</label>
+                        <input type="number" name="maxPrice" value="@Model.MaxPrice" class="form-control" placeholder="₱999,999" 
+                               style="background: #1a1a1a; border: 1px solid #2a2a2a; color: #e0e0e0; border-radius: 6px; padding: 8px 12px;">
+                    </div>
+                    <div class="col-lg-2 col-md-6 d-flex align-items-end">
+                        <a href="@Url.Action("Index", "Home")" class="btn btn-outline-light w-100" style="border-radius: 6px; padding: 8px 12px;">
+                            <i class="fas fa-redo me-1"></i>Clear Filters
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Products Grid Section -->
+    <section class="py-5" style="background: #0d0d0d;" id="featured-deals">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 style="font-size: 1.65rem; font-weight: 500; color: #ffffff; margin: 0; letter-spacing: 0.02em;">
+                    All Watches
+                </h2>
+                <span style="color: #888; font-size: 0.95rem;">
+                    @(Model.AllProducts?.Count ?? 0) products found
+                </span>
+            </div>
+            
+            <div class="row g-4">
+                @if (Model.AllProducts != null && Model.AllProducts.Any())
+                {
+                    foreach (var product in Model.AllProducts)
+                    {
+                        var primaryImage = product.ProductImages.FirstOrDefault(i => i.IsPrimary)?.ImageUrl ?? "/Content/images/placeholder-watch.jpg";
+                        var hasDiscount = product.DiscountPrice.HasValue;
+                        var discountPercent = hasDiscount ? (int)Math.Round(((product.Price - product.DiscountPrice.Value) / product.Price) * 100) : 0;
+                        
+                        <div class="col-lg-3 col-md-6">
+                            <div class="luxury-product-card">
+                                <div class="luxury-product-image-container">
+                                    @if (hasDiscount && discountPercent > 0)
+                                    {
+                                        <span class="luxury-product-badge">-@(discountPercent)%</span>
+                                    }
+                                    <a href="@Url.Action("Details", "Product", new { id = product.ProductId })">
+                                        <img src="@primaryImage" alt="@product.ProductName" />
+                                    </a>
+                                </div>
+                                
+                                <div class="luxury-product-info">
+                                    <div class="luxury-product-brand">@product.Brand.BrandName</div>
+                                    <a href="@Url.Action("Details", "Product", new { id = product.ProductId })" style="text-decoration: none;">
+                                        <h5 class="luxury-product-name" style="color: white;">@product.ProductName</h5>
+
+                                    </a>
+                                    
+                                    <div class="luxury-product-price">
+                                        @if (hasDiscount)
+                                        {
+                                            <span class="luxury-price-current">₱@product.DiscountPrice.Value.ToString("N0")</span>
+                                            <span class="luxury-price-original">₱@product.Price.ToString("N0")</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="luxury-price-current">₱@product.Price.ToString("N0")</span>
+                                        }
+                                    </div>
+                                    
+                                    <div class="luxury-product-actions">
+                                        <a href="@Url.Action("Details", "Product", new { id = product.ProductId })" class="luxury-btn-primary">
+                                            <i class="fas fa-shopping-bag"></i>
+                                            Buy Now
+                                        </a>
+
+                                        <button onclick="event.preventDefault(); addToCart(@product.ProductId);"
+                                                class="luxury-icon-button"
+                                                title="Add to Cart"
+                                                style="
+            border: 2px solid white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: transparent;
+            cursor: pointer;
+            margin-top: 3px;
+        "
+                                                onmouseover="this.style.borderColor='#E1AD01'; this.querySelector('i').style.color='#E1AD01';"
+                                                onmouseout="this.style.borderColor='white'; this.querySelector('i').style.color='white';">
+                                            <i class="fas fa-shopping-cart" style="color: white; font-size: 18px;"></i>
+                                        </button>
+
+                                        <button onclick="event.preventDefault(); addToWishlist(@product.ProductId);"
+                                                class="luxury-icon-button"
+                                                title="Add to Wishlist"
+                                                style="
+            border: 2px solid white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: transparent;
+            cursor: pointer;
+            margin-top: 3px;
+        "
+                                                onmouseover="this.style.borderColor='#E1AD01'; this.querySelector('i').style.color='#E1AD01';"
+                                                onmouseout="this.style.borderColor='white'; this.querySelector('i').style.color='white';">
+                                            <i class="fas fa-heart" style="color: white; font-size: 18px;"></i>
+                                        </button>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="col-12">
+                        <div class="text-center py-5">
+                            <i class="fas fa-search" style="font-size: 4rem; color: #2a2a2a; margin-bottom: 1rem;"></i>
+                            <h3 style="color: #888; font-size: 1.5rem; margin-bottom: 0.5rem;">No products found</h3>
+                            <p style="color: #666;">Try adjusting your filters to see more results</p>
+                            <a href="@Url.Action("Index", "Home")" class="btn btn-primary mt-3">
+                                <i class="fas fa-redo me-2"></i>Reset Filters
+                            </a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+}
+
+@section styles {
+    <link href="~/Content/css/luxury-redesign.css?v=1.2" rel="stylesheet" />
+    <link href="~/Content/css/ios-notifications.css?v=1.0" rel="stylesheet" />
+    <style>
+        /* Enhanced Hover effects with animations */
+        .trust-card:hover,
+        .feature-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+            background: #2a2a2a !important;
+        }
+        
+        .trust-card:hover .trust-icon,
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1) rotate(5deg);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .brand-pill:hover {
+            background: #2a2a2a !important;
+            border-color: #3a3a3a !important;
+            color: #ffffff !important;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.6);
+        }
+        
+        .model-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .model-card:hover {
+            transform: translateY(-12px) scale(1.03);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.9);
+            background: #1a1a1a !important;
+        }
+        
+        .model-card:hover .card-overlay {
+            opacity: 1;
+        }
+        
+        .model-card:hover img {
+            transform: scale(1.25) rotate(-3deg);
+            filter: brightness(1.15);
+        }
+        
+        .model-card:hover .model-info {
+            background: #1a1a1a !important;
+        }
+        
+        .model-card:hover .model-brand {
+            color: #aaa !important;
+            transform: translateX(3px);
+        }
+        
+        .model-card:hover .model-name {
+            color: #ffffff !important;
+            transform: translateX(3px);
+        }
+        
+        .model-card:hover .model-price {
+            transform: translateY(-3px) scale(1.05);
+        }
+        
+        .model-card .model-image {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .model-card:hover .model-image {
+            background: #0a0a0a !important;
+        }
+        
+        /* Action icon button hover effects */
+        .action-icon-btn:hover {
+            transform: translateY(-2px);
+            background: #2a2a2a !important;
+            border-color: #3a3a3a !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        }
+        
+        .action-btn-cart:hover i {
+            color: #007bff !important;
+        }
+        
+        .action-btn-wishlist:hover i {
+            color: #dc3545 !important;
+        }
+        
+        /* Buy Now button hover */
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4);
+        }
+        
+        /* Filter form styling */
+        .form-control:focus {
+            background: #2a2a2a !important;
+            border-color: #3a3a3a !important;
+            color: #ffffff !important;
+            outline: none;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+        
+        .form-control option {
+            background: #1a1a1a;
+            color: #e0e0e0;
+        }
+        
+        /* Smooth animations */
+        .trust-card, .feature-card, .brand-pill, .model-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .model-card img {
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .trust-icon, .feature-icon {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .model-brand, .model-name {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .action-icon-btn {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Glow effect on hover */
+        .model-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 10px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 50%);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 1;
+            transition: opacity 0.4s ease;
+        }
+        
+        .model-card:hover::before {
+            opacity: 1;
+        }
+        
+        /* Subtle shine effect on hover */
+        .model-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.05) 50%, transparent 70%);
+            opacity: 0;
+            transform: rotate(45deg);
+            transition: all 0.6s ease;
+            pointer-events: none;
+        }
+        
+        .model-card:hover::after {
+            opacity: 1;
+            left: 100%;
+        }
+    </style>
+}
+
+@section scripts {
+    <script>
+        $(document).ready(function() {
+            // Auto-submit form on select change
+            $('.form-control[name="brandId"], .form-control[name="categoryId"], .form-control[name="gender"], .form-control[name="sortBy"]').on('change', function() {
+                $('#filterForm').submit();
+            });
+            
+            // Smooth scroll for anchor links
+            $('a[href^="#"]').on('click', function(e) {
+                e.preventDefault();
+                var target = $(this.getAttribute('href'));
+                if (target.length) {
+                    $('html, body').stop().animate({
+                        scrollTop: target.offset().top - 100
+                    }, 1000);
+                }
+            });
+            
+            // Add animation on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -100px 0px'
+            };
+            
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-fade-in-up');
+                    }
+                });
+            }, observerOptions);
+            
+            document.querySelectorAll('.luxury-product-card').forEach(el => {
+                observer.observe(el);
+            });
+        });
+        
+        // Add to Cart function
+        function addToCart(productId) {
+            $.ajax({
+                url: '@Url.Action("Add", "Cart")',
+                type: 'POST',
+                data: { productId: productId, quantity: 1 },
+                success: function(response) {
+                    if (response.success) {
+                        showNotification('Added to cart successfully!', 'success');
+                        updateCartCount();
+                    } else {
+                        showNotification(response.message || 'Failed to add to cart', 'error');
+                    }
+                },
+                error: function() {
+                    showNotification('An error occurred. Please try again.', 'error');
+                }
+            });
+        }
+        
+        // Add to Wishlist function
+        function addToWishlist(productId) {
+            $.ajax({
+                url: '@Url.Action("Add", "Wishlist")',
+                type: 'POST',
+                data: { productId: productId },
+                success: function(response) {
+                    if (response.success) {
+                        showNotification('Added to wishlist successfully!', 'success');
+                    } else {
+                        showNotification(response.message || 'Failed to add to wishlist', 'error');
+                    }
+                },
+                error: function() {
+                    showNotification('An error occurred. Please try again.', 'error');
+                }
+            });
+        }
+        
+        // Show notification function - iOS STYLE
+        function showNotification(message, type) {
+            // Create notification container if it doesn't exist
+            if (!$('.ios-notification-container').length) {
+                $('body').append('<div class="ios-notification-container"></div>');
+            }
+            
+            // Determine icon based on type
+            var icon = '';
+            var title = '';
+            switch(type) {
+                case 'success':
+                    icon = '<i class="fas fa-check-circle"></i>';
+                    title = 'Success';
+                    break;
+                case 'error':
+                    icon = '<i class="fas fa-times-circle"></i>';
+                    title = 'Error';
+                    break;
+                case 'warning':
+                    icon = '<i class="fas fa-exclamation-triangle"></i>';
+                    title = 'Warning';
+                    break;
+                case 'info':
+                    icon = '<i class="fas fa-info-circle"></i>';
+                    title = 'Info';
+                    break;
+                default:
+                    icon = '<i class="fas fa-bell"></i>';
+                    title = 'Notification';
+            }
+            
+            // Create notification HTML
+            var notification = $('<div>')
+                .addClass('ios-notification ' + type)
+                .html(`
+                    <div class="ios-notification-content">
+                        <div class="ios-notification-icon">
+                            ${icon}
+                        </div>
+                        <div class="ios-notification-text">
+                            <div class="ios-notification-title">${title}</div>
+                            <div class="ios-notification-message">${message}</div>
+                        </div>
+                    </div>
+                    <div class="ios-notification-progress">
+                        <div class="ios-notification-progress-bar"></div>
+                    </div>
+                `);
+            
+            // Add to container
+            $('.ios-notification-container').append(notification);
+            
+            // Trigger show animation
+            setTimeout(function() {
+                notification.addClass('show haptic');
+            }, 10);
+            
+            // Remove haptic class
+            setTimeout(function() {
+                notification.removeClass('haptic');
+            }, 300);
+            
+            // Auto hide after 3 seconds
+            setTimeout(function() {
+                notification.removeClass('show').addClass('hide');
+                setTimeout(function() {
+                    notification.remove();
+                    // Remove container if empty
+                    if (!$('.ios-notification-container').children().length) {
+                        $('.ios-notification-container').remove();
+                    }
+                }, 300);
+            }, 3000);
+        }
+        
+        // Update cart count
+        function updateCartCount() {
+            $.ajax({
+                url: '@Url.Action("GetCartCount", "Cart")',
+                type: 'GET',
+                success: function(data) {
+                    if (data && data.count !== undefined) {
+                        $('#cartBadge').text(data.count);
+                        if (data.count > 0) {
+                            $('#cartBadge').show();
+                        } else {
+                            $('#cartBadge').hide();
+                        }
+                    }
+                },
+                error: function() {
+                    console.log('Failed to update cart count');
+                }
+            });
+        }
+    </script>
+}

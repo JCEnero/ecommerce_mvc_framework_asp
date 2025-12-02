@@ -1,0 +1,308 @@
+@model List<Omlajue_Ecommerce.Models.WishlistItem>
+@{
+    ViewBag.Title = "My Wishlist";
+}
+
+@section styles {
+    <link href="~/Content/css/wishlist.css?v=1.2" rel="stylesheet" />
+    <link href="~/Content/css/ios-notifications.css?v=1.0" rel="stylesheet" />
+    <style>
+        /* FIX BUTTON CLICKABILITY - Add explicit z-index and pointer-events */
+        .wishlist-item-actions {
+            position: relative;
+            z-index: 100 !important;
+            pointer-events: auto !important;
+        }
+        
+        .move-to-cart-btn,
+        .remove-wishlist-btn {
+            cursor: pointer !important;
+            pointer-events: all !important;
+            position: relative;
+            z-index: 150 !important;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .move-to-cart-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #c9a961 0%, #a08849 100%);
+            color: #000000;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(201,169,97,0.3);
+        }
+        
+        .move-to-cart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(201,169,97,0.5);
+        }
+        
+        .move-to-cart-btn:active {
+            transform: translateY(0);
+        }
+        
+        .remove-wishlist-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 1px solid #2a2a2a;
+            background: transparent;
+            color: #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+        }
+        
+        .remove-wishlist-btn:hover {
+            background: #dc3545;
+            border-color: #dc3545;
+            color: #ffffff;
+            transform: rotate(90deg) scale(1.1);
+        }
+        
+        .remove-wishlist-btn:active {
+            transform: rotate(90deg) scale(0.95);
+        }
+        
+        /* Ensure card components don't overlap buttons */
+        .wishlist-item-card {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .wishlist-item-info {
+            padding: 25px;
+            background: #0f0f0f;
+            position: relative;
+            z-index: 5;
+        }
+        
+        .wishlist-item-image-wrapper,
+        .wishlist-item-brand,
+        .wishlist-item-name,
+        .wishlist-item-price {
+            pointer-events: none;
+        }
+        
+        /* Mobile responsive fixes */
+        @@media (max-width: 768px) {
+            .wishlist-item-actions {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .move-to-cart-btn {
+                width: 100%;
+            }
+            
+            .remove-wishlist-btn {
+                width: 100%;
+                border-radius: 50px;
+                height: 45px;
+            }
+        }
+    </style>
+}
+
+<div class="wishlist-page-wrapper">
+    <div class="container">
+        <h1 class="wishlist-page-title">My Wishlist</h1>
+        
+        @if (Model != null && Model.Any())
+        {
+            <div class="row g-4">
+                @foreach (var item in Model)
+                {
+                    var img = item.Product.ProductImages?.FirstOrDefault(i => i.IsPrimary);
+                    var imageUrl = img != null ? img.ImageUrl : "/Content/images/placeholder-watch.jpg";
+                    
+                    <div class="col-lg-3 col-md-4 col-sm-6">
+                        <div class="wishlist-item-card">
+                            <!-- Product Image -->
+                            <div class="wishlist-item-image-wrapper">
+                                <img src="@imageUrl" alt="@item.Product.ProductName" class="wishlist-item-image" />
+                            </div>
+                            
+                            <!-- Product Info -->
+                            <div class="wishlist-item-info">
+                                <div class="wishlist-item-brand">@item.Product.Brand.BrandName</div>
+                                <h3 class="wishlist-item-name">@item.Product.ProductName</h3>
+                                
+                                <!-- Price -->
+                                <div class="wishlist-item-price">
+                                    @if (item.Product.DiscountPrice.HasValue)
+                                    {
+                                        <span class="price-current">&#8369;@item.Product.DiscountPrice.Value.ToString("N0")</span>
+                                        <span class="price-original">&#8369;@item.Product.Price.ToString("N0")</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="price-current">&#8369;@item.Product.Price.ToString("N0")</span>
+                                    }
+                                </div>
+                                
+                                <!-- Action Buttons -->
+                                <div class="wishlist-item-actions">
+                                    <button type="button" class="move-to-cart-btn" onclick="moveToCart(@item.WishlistItemId)">
+                                        <i class="fas fa-shopping-cart me-2"></i>Move to Cart
+                                    </button>
+                                    <button type="button" class="remove-wishlist-btn" onclick="removeFromWishlist(@item.WishlistItemId)" title="Remove">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="empty-wishlist-container">
+                <div class="empty-wishlist-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <h2 class="empty-wishlist-title">Your Wishlist is Empty</h2>
+                <p class="empty-wishlist-text">Save your favorite timepieces for later</p>
+                <a href="@Url.Action("Index", "Home")" class="browse-products-btn">
+                    Explore Collection
+                </a>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function moveToCart(wishlistItemId) {
+            console.log('moveToCart called with ID:', wishlistItemId);
+            $.post('@Url.Action("MoveToCart", "Wishlist")', { wishlistItemId: wishlistItemId }, function(result) {
+                if (result.success) {
+                    showNotification('Item moved to cart successfully!', 'success');
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+                } else {
+                    showNotification(result.message || 'Failed to move item', 'error');
+                }
+            }).fail(function() {
+                showNotification('An error occurred. Please try again.', 'error');
+            });
+        }
+        
+        function removeFromWishlist(wishlistItemId) {
+            console.log('removeFromWishlist called with ID:', wishlistItemId);
+            if (confirm('Remove this item from your wishlist?')) {
+                $.post('@Url.Action("Remove", "Wishlist")', { wishlistItemId: wishlistItemId }, function(result) {
+                    if (result.success) {
+                        showNotification('Item removed successfully!', 'success');
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1000);
+                    } else {
+                        showNotification(result.message || 'Failed to remove item', 'error');
+                    }
+                }).fail(function() {
+                    showNotification('An error occurred. Please try again.', 'error');
+                });
+            }
+        }
+        
+        function showNotification(message, type) {
+            // Create notification container if it doesn't exist
+            if (!$('.ios-notification-container').length) {
+                $('body').append('<div class="ios-notification-container"></div>');
+            }
+            
+            // Determine icon based on type
+            var icon = '';
+            var title = '';
+            switch(type) {
+                case 'success':
+                    icon = '<i class="fas fa-check-circle"></i>';
+                    title = 'Success';
+                    break;
+                case 'error':
+                    icon = '<i class="fas fa-times-circle"></i>';
+                    title = 'Error';
+                    break;
+                default:
+                    icon = '<i class="fas fa-bell"></i>';
+                    title = 'Notification';
+            }
+            
+            // Create notification HTML
+            var notification = $('<div>')
+                .addClass('ios-notification ' + type)
+                .html(`
+                    <div class="ios-notification-content">
+                        <div class="ios-notification-icon">
+                            ${icon}
+                        </div>
+                        <div class="ios-notification-text">
+                            <div class="ios-notification-title">${title}</div>
+                            <div class="ios-notification-message">${message}</div>
+                        </div>
+                    </div>
+                    <div class="ios-notification-progress">
+                        <div class="ios-notification-progress-bar"></div>
+                    </div>
+                `);
+            
+            // Add to container
+            $('.ios-notification-container').append(notification);
+            
+            // Trigger show animation
+            setTimeout(function() {
+                notification.addClass('show haptic');
+            }, 10);
+            
+            // Remove haptic class
+            setTimeout(function() {
+                notification.removeClass('haptic');
+            }, 300);
+            
+            // Auto hide after 3 seconds
+            setTimeout(function() {
+                notification.removeClass('show').addClass('hide');
+                setTimeout(function() {
+                    notification.remove();
+                    if (!$('.ios-notification-container').children().length) {
+                        $('.ios-notification-container').remove();
+                    }
+                }, 300);
+            }, 3000);
+        }
+        
+        $(document).ready(function() {
+            console.log('Wishlist page loaded successfully');
+            
+            // Add click event listeners with explicit handlers
+            $('.move-to-cart-btn').each(function() {
+                $(this).on('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('Move to cart button clicked');
+                });
+            });
+            
+            $('.remove-wishlist-btn').each(function() {
+                $(this).on('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('Remove button clicked');
+                });
+            });
+        });
+    </script>
+}

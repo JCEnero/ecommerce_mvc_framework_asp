@@ -1,0 +1,196 @@
+@model Omlajue_Ecommerce.Models.ViewModels.ProductListViewModel
+@{
+    ViewBag.Title = "Products";
+}
+
+@section styles {
+    <link href="~/Content/css/product-list.css?v=1.1" rel="stylesheet" />
+    <style>
+        /* FIX BUTTON CLICKABILITY ON PRODUCT CARDS */
+        .product-list-card {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .product-list-info {
+            position: relative;
+            z-index: 10;
+        }
+        
+        .view-details-btn {
+            cursor: pointer !important;
+            pointer-events: all !important;
+            position: relative;
+            z-index: 100 !important;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .product-list-image-wrapper,
+        .product-list-brand,
+        .product-list-name,
+        .product-list-price {
+            pointer-events: none;
+        }
+        
+        /* Ensure images don't block buttons */
+        .product-list-image {
+            pointer-events: none;
+        }
+    </style>
+}
+
+<div class="product-list-page-wrapper">
+    <div class="container">
+        <h1 class="product-list-page-title">Luxury Timepieces</h1>
+        
+        <div class="row">
+            <!-- Filter Sidebar -->
+            <div class="col-lg-3">
+                <div class="filter-sidebar">
+                    <h2 class="filter-title">Filters</h2>
+                    
+                    <form method="get" action="@Url.Action("List", "Product")" id="filterForm">
+                        <div class="filter-group">
+                            <label class="filter-label">Category</label>
+                            <select name="categoryId" class="filter-select">
+                                <option value="">All Categories</option>
+                                @if (Model.Categories != null)
+                                {
+                                    foreach (var category in Model.Categories)
+                                    {
+                                        <option value="@category.CategoryId" @(Model.CategoryId == category.CategoryId ? "selected" : "")>
+                                            @category.CategoryName
+                                        </option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label class="filter-label">Brand</label>
+                            <select name="brandId" class="filter-select">
+                                <option value="">All Brands</option>
+                                @if (Model.Brands != null)
+                                {
+                                    foreach (var brand in Model.Brands)
+                                    {
+                                        <option value="@brand.BrandId" @(Model.BrandId == brand.BrandId ? "selected" : "")>
+                                            @brand.BrandName
+                                        </option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label class="filter-label">Gender</label>
+                            <select name="gender" class="filter-select">
+                                <option value="">All</option>
+                                <option value="Men" @(Model.Gender == "Men" ? "selected" : "")>Men</option>
+                                <option value="Women" @(Model.Gender == "Women" ? "selected" : "")>Women</option>
+                                <option value="Unisex" @(Model.Gender == "Unisex" ? "selected" : "")>Unisex</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label class="filter-label">Sort By</label>
+                            <select name="sortBy" class="filter-select">
+                                <option value="">Default</option>
+                                <option value="price_asc" @(Model.SortBy == "price_asc" ? "selected" : "")>Price: Low to High</option>
+                                <option value="price_desc" @(Model.SortBy == "price_desc" ? "selected" : "")>Price: High to Low</option>
+                                <option value="name_asc" @(Model.SortBy == "name_asc" ? "selected" : "")>Name: A-Z</option>
+                                <option value="newest" @(Model.SortBy == "newest" ? "selected" : "")>Newest First</option>
+                            </select>
+                        </div>
+                        
+                        <button type="submit" class="apply-filters-btn">
+                            <i class="fas fa-filter me-2"></i>Apply Filters
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Product Grid -->
+            <div class="col-lg-9">
+                <div class="product-grid-container">
+                    @if (Model.Products != null && Model.Products.Any())
+                    {
+                        foreach (var product in Model.Products)
+                        {
+                            var img = product.ProductImages?.FirstOrDefault(i => i.IsPrimary);
+                            var imageUrl = img != null ? img.ImageUrl : "/Content/images/placeholder-watch.jpg";
+                            
+                            <div class="product-list-card">
+                                <!-- Product Image -->
+                                <div class="product-list-image-wrapper">
+                                    <img src="@imageUrl" alt="@product.ProductName" class="product-list-image" />
+                                </div>
+                                
+                                <!-- Product Info -->
+                                <div class="product-list-info">
+                                    <div class="product-list-brand">@product.Brand.BrandName</div>
+                                    <h3 class="product-list-name">@product.ProductName</h3>
+                                    
+                                    <!-- Price -->
+                                    <div class="product-list-price">
+                                        @if (product.DiscountPrice.HasValue)
+                                        {
+                                            <span class="price-current">&#8369;@product.DiscountPrice.Value.ToString("N0")</span>
+                                            <span class="price-original">&#8369;@product.Price.ToString("N0")</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="price-current">&#8369;@product.Price.ToString("N0")</span>
+                                        }
+                                    </div>
+                                    
+                                    <!-- View Details Button -->
+                                    <a href="@Url.Action("Details", "Product", new { id = product.ProductId })" class="view-details-btn">
+                                        <i class="fas fa-eye me-2"></i>View Details
+                                    </a>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="no-products-container">
+                            <div class="no-products-icon">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <h2 class="no-products-title">No Products Found</h2>
+                            <p class="no-products-text">Try adjusting your filters to see more results</p>
+                        </div>
+                    }
+                </div>
+                
+                <!-- Pagination -->
+                @if (Model.TotalPages > 1)
+                {
+                    <div class="pagination-container">
+                        <ul class="pagination">
+                            @for (int i = 1; i <= Model.TotalPages; i++)
+                            {
+                                <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                                    <a class="page-link" href="@Url.Action("List", "Product", new { page = i, categoryId = Model.CategoryId, brandId = Model.BrandId, gender = Model.Gender, sortBy = Model.SortBy })">@i</a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Auto-submit form on filter change
+            $('.filter-select').on('change', function() {
+                $('#filterForm').submit();
+            });
+        });
+    </script>
+}

@@ -1,0 +1,301 @@
+/* =============================================
+   Omlajue Admin Panel Styles
+   ============================================= */
+
+:root {
+    --admin-bg: #1a1d2e;
+    --admin-sidebar: #151824;
+    --admin-accent: #3b82f6;
+    --admin-text: #e2e8f0;
+    --admin-text-muted: #94a3b8;
+    --admin-border: #2d3548;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--admin-bg);
+    color: var(--admin-text);
+}
+
+/* ===== Wrapper ===== */
+.wrapper {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+}
+
+/* ===== Sidebar ===== */
+#sidebar {
+    min-width: 260px;
+    max-width: 260px;
+    background: var(--admin-sidebar);
+    color: var(--admin-text);
+    transition: all 0.3s;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 999;
+    overflow-y: auto;
+}
+
+#sidebar.active {
+    margin-left: -260px;
+}
+
+.sidebar-header {
+    padding: 2rem 1.5rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-bottom: 1px solid var(--admin-border);
+}
+
+.sidebar-header h3 {
+    color: #ffffff;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+    letter-spacing: 2px;
+}
+
+.sidebar-header p {
+    margin-bottom: 0;
+    font-size: 0.85rem;
+    opacity: 0.8;
+}
+
+#sidebar ul.components {
+    padding: 1rem 0;
+}
+
+#sidebar ul li {
+    padding: 0;
+}
+
+#sidebar ul li a {
+    padding: 0.9rem 1.5rem;
+    display: block;
+    color: var(--admin-text-muted);
+    text-decoration: none;
+    transition: all 0.3s;
+    border-left: 3px solid transparent;
+}
+
+#sidebar ul li a:hover {
+    color: var(--admin-text);
+    background: rgba(59, 130, 246, 0.1);
+    border-left-color: var(--admin-accent);
+}
+
+#sidebar ul li.active > a {
+    color: var(--admin-text);
+    background: rgba(59, 130, 246, 0.15);
+    border-left-color: var(--admin-accent);
+}
+
+#sidebar ul li a i {
+    width: 20px;
+}
+
+#sidebar ul ul a {
+    font-size: 0.9rem;
+    padding-left: 3rem;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.sidebar-footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 1.5rem;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+/* ===== Content ===== */
+#content {
+    width: 100%;
+    min-height: 100vh;
+    transition: all 0.3s;
+    margin-left: 260px;
+}
+
+#content.active {
+    margin-left: 0;
+}
+
+/* ===== Admin Navbar ===== */
+.admin-navbar {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--admin-border);
+    margin-bottom: 2rem;
+}
+
+#sidebarCollapse {
+    background: transparent;
+    border: none;
+    color: var(--admin-text);
+    font-size: 1.2rem;
+    padding: 0.5rem;
+}
+
+#sidebarCollapse:hover {
+    color: var(--admin-accent);
+}
+
+/* ===== Cards ===== */
+.admin-card {
+    background: var(--admin-sidebar);
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s;
+}
+
+.admin-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+}
+
+.stat-card {
+    background: linear-gradient(135deg, var(--admin-sidebar), var(--admin-bg));
+    border: 1px solid var(--admin-border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.3s;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+}
+
+.stat-icon.bg-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.stat-icon.bg-success {
+    background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+}
+
+.stat-icon.bg-warning {
+    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+}
+
+.stat-icon.bg-danger {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+}
+
+.stat-label {
+    color: var(--admin-text-muted);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* ===== Tables ===== */
+.admin-table {
+    background: var(--admin-sidebar);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.admin-table table {
+    margin-bottom: 0;
+}
+
+.admin-table thead {
+    background: rgba(59, 130, 246, 0.1);
+}
+
+.admin-table thead th {
+    border-color: var(--admin-border);
+    color: var(--admin-text);
+    font-weight: 600;
+    padding: 1rem;
+}
+
+.admin-table tbody td {
+    border-color: var(--admin-border);
+    color: var(--admin-text);
+    padding: 1rem;
+    vertical-align: middle;
+}
+
+.admin-table tbody tr:hover {
+    background: rgba(59, 130, 246, 0.05);
+}
+
+/* ===== Badges ===== */
+.badge {
+    padding: 0.4rem 0.8rem;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ===== Buttons ===== */
+.btn-admin-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    font-weight: 600;
+    padding: 0.6rem 1.5rem;
+}
+
+.btn-admin-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+/* ===== Forms ===== */
+.form-control,
+.form-select {
+    background-color: var(--admin-sidebar);
+    border: 1px solid var(--admin-border);
+    color: var(--admin-text);
+}
+
+.form-control:focus,
+.form-select:focus {
+    background-color: var(--admin-sidebar);
+    border-color: var(--admin-accent);
+    color: var(--admin-text);
+    box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
+}
+
+.form-label {
+    color: var(--admin-text);
+    font-weight: 500;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+    #sidebar {
+        margin-left: -260px;
+    }
+    #sidebar.active {
+        margin-left: 0;
+    }
+    #content {
+        margin-left: 0;
+    }
+}

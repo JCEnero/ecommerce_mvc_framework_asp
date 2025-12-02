@@ -1,0 +1,548 @@
+﻿@model Omlajue_Ecommerce.Models.ViewModels.CartViewModel
+@{
+    ViewBag.Title = "Shopping Cart";
+}
+
+@section styles {
+    <link href="~/Content/css/luxury-redesign.css?v=1.2" rel="stylesheet" />
+    <link href="~/Content/css/ios-notifications.css?v=1.0" rel="stylesheet" />
+    <style>
+        /* Enhanced cart item action buttons - FIX CLICKABILITY */
+        .luxury-cart-item-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            z-index: 100 !important;
+            pointer-events: auto !important;
+        }
+        
+        /* Luxury icon buttons for wishlist and cart - CIRCULAR WITH GOLD BORDER */
+        .luxury-action-icon-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #0a0a0a;
+            border: 2px solid var(--gold);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer !important;
+            pointer-events: all !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 150 !important;
+            user-select: none;
+        }
+        
+        .luxury-action-icon-btn:hover {
+            background: var(--gold);
+            border-color: var(--gold);
+            color: #000000;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+        }
+        
+        .luxury-action-icon-btn.wishlist:hover {
+            background: #dc3545;
+            border-color: #dc3545;
+            color: #ffffff;
+            box-shadow: 0 8px 25px rgba(220, 53, 69, 0.4);
+        }
+        
+        .luxury-action-icon-btn.remove:hover {
+            background: #28a745;
+            border-color: #28a745;
+            color: #ffffff;
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.4);
+        }
+        
+        /* Redesigned Buy Now button */
+        .luxury-buy-now-btn {
+            padding: 14px 36px;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+            color: #000000;
+            border: none;
+            border-radius: 50px;
+            font-family: var(--font-primary);
+            font-weight: 600;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+            cursor: pointer !important;
+            pointer-events: all !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            white-space: nowrap;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+            flex-shrink: 0;
+            position: relative;
+            z-index: 150 !important;
+            user-select: none;
+        }
+        
+        .luxury-buy-now-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(212, 175, 55, 0.6);
+            background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold) 100%);
+            color: #000000;
+            text-decoration: none;
+        }
+        
+        .luxury-buy-now-btn i {
+            font-size: 1.1rem;
+            pointer-events: none;
+        }
+        
+        /* Adjust cart item layout for better button arrangement */
+        .luxury-cart-item {
+            background: var(--matte-black);
+            border-radius: 16px;
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-md);
+            display: flex;
+            gap: var(--spacing-lg);
+            align-items: center;
+            box-shadow: var(--shadow-luxury);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .luxury-cart-item:hover {
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+            transform: translateY(-2px);
+            z-index: 2;
+        }
+        
+        .luxury-cart-item-image {
+            width: 140px;
+            height: 140px;
+            flex-shrink: 0;
+            background: #0a0a0a;
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        
+        .luxury-cart-item-image img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            pointer-events: none;
+        }
+        
+        .luxury-cart-item-details {
+            flex: 1;
+            min-width: 0;
+            z-index: 5;
+            pointer-events: none;
+        }
+        
+        .luxury-cart-item-right-section {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md);
+            align-items: flex-end;
+            z-index: 100;
+            position: relative;
+            pointer-events: auto;
+        }
+        
+        .luxury-cart-item-controls {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            z-index: 100;
+            pointer-events: auto;
+        }
+        
+        /* Quantity selector buttons - FIX CLICKABILITY */
+        .luxury-quantity-selector {
+            position: relative;
+            z-index: 120 !important;
+            pointer-events: auto !important;
+        }
+        
+        .luxury-qty-btn {
+            cursor: pointer !important;
+            pointer-events: all !important;
+            position: relative;
+            z-index: 150 !important;
+            user-select: none;
+        }
+        
+        .luxury-qty-input {
+            pointer-events: none;
+        }
+        
+        /* Ensure no overlapping elements */
+        .luxury-cart-item-total {
+            z-index: 5;
+            position: relative;
+            pointer-events: none;
+        }
+        
+        /* Fix for all interactive elements */
+        button, a.luxury-buy-now-btn {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        /* Mobile responsive fixes */
+        @@media (max-width: 768px) {
+            .luxury-cart-item {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .luxury-cart-item-right-section {
+                align-items: stretch;
+            }
+            
+            .luxury-cart-item-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .luxury-cart-item-actions {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .luxury-buy-now-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .luxury-action-icon-btn {
+                width: 100%;
+                border-radius: 50px;
+                height: 50px;
+            }
+            
+            .luxury-cart-item-total {
+                text-align: center;
+                margin: 10px 0;
+            }
+        }
+    </style>
+}
+
+<!-- Luxury Cart Container -->
+<div class="luxury-cart-container">
+    <div class="container">
+        <h1 class="luxury-cart-header" style="color: white;">
+            <i class="fas fa-shopping-bag me-3" style="color: white;"></i>
+            Shopping Cart
+        </h1>
+
+
+        @if (Model.CartItems != null && Model.CartItems.Any())
+        {
+            <div class="row g-4">
+                <div class="col-lg-8">
+                    <div class="cart-items-wrapper">
+                        @foreach (var item in Model.CartItems)
+                        {
+                            <div class="luxury-cart-item" data-item-id="@item.CartItemId">
+                                <div class="luxury-cart-item-image">
+                                    <img src="@item.ImageUrl" alt="@item.ProductName" />
+                                </div>
+
+                                <div class="luxury-cart-item-details">
+                                    <div class="luxury-cart-item-brand">@item.BrandName</div>
+                                    <h3 class="luxury-cart-item-name" style="color: white;">@item.ProductName</h3>
+
+                                    <div class="luxury-cart-item-price">₱@item.Price.ToString("N0")</div>
+                                </div>
+
+                                <div class="luxury-cart-item-right-section">
+                                    <div class="luxury-cart-item-controls">
+                                        <div class="luxury-quantity-selector">
+                                            <button type="button" class="luxury-qty-btn" onclick="decrementQuantity(@item.CartItemId, @item.Quantity)">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                            <input type="text" class="luxury-qty-input" id="qty-@item.CartItemId" value="@item.Quantity" readonly />
+                                            <button type="button" class="luxury-qty-btn" onclick="incrementQuantity(@item.CartItemId, @item.Quantity, @item.StockQuantity)">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </div>
+
+                                        <div class="luxury-cart-item-total" style="min-width: 140px; text-align: right;">
+                                            <div style="font-size: 0.75rem; color: var(--soft-gray); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 1px;">Total</div>
+                                            <div class="luxury-cart-item-price" id="total-@item.CartItemId">₱@item.TotalPrice.ToString("N0")</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="luxury-cart-item-actions">
+                                        <a href="@Url.Action("Details", "Product", new { id = item.ProductId })" class="luxury-buy-now-btn">
+                                            <i class="fas fa-shopping-bag"></i>
+                                            <span>Buy Now</span>
+                                        </a>
+
+                                        <button type="button" class="luxury-action-icon-btn wishlist" onclick="moveToWishlist(@item.ProductId, @item.CartItemId)" title="Move to Wishlist">
+                                            <i class="fas fa-heart"></i>
+                                        </button>
+
+                                        <button type="button" class="luxury-action-icon-btn remove" onclick="removeFromCart(@item.CartItemId)" title="Remove from Cart">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="luxury-order-summary">
+                        <h2 class="luxury-summary-title" style="color: white;">Order Summary</h2>
+
+                        <div class="luxury-summary-row">
+                            <span class="luxury-summary-label">Subtotal (@Model.CartItems.Count items)</span>
+                            <span class="luxury-summary-value" id="cart-subtotal">₱@Model.SubTotal.ToString("N0")</span>
+                        </div>
+
+                        <div class="luxury-summary-row">
+                            <span class="luxury-summary-label">Shipping Fee</span>
+                            <span class="luxury-summary-value">₱@Model.ShippingFee.ToString("N0")</span>
+                        </div>
+
+                        @if (Model.SubTotal >= 50000)
+                        {
+                            <div class="luxury-summary-row" style="color: var(--gold);">
+                                <span class="luxury-summary-label">
+                                    <i class="fas fa-gift me-2"></i>Free Shipping Applied
+                                </span>
+                                <span class="luxury-summary-value">-₱@Model.ShippingFee.ToString("N0")</span>
+                            </div>
+                        }
+
+                        <div class="luxury-summary-total">
+                            <span class="luxury-summary-label">Total</span>
+                            <span class="luxury-summary-value" id="cart-total">₱@Model.Total.ToString("N0")</span>
+                        </div>
+
+                        <a href="@Url.Action("Index", "Checkout")" class="luxury-checkout-btn">
+                            <i class="fas fa-lock me-2"></i>
+                            Proceed to Checkout
+                        </a>
+
+                        <div style="text-align: center; margin-top: var(--spacing-md);">
+                            <a href="@Url.Action("Index", "Home")" style="color: var(--gold); text-decoration: none; font-family: var(--font-secondary); font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.3s ease;">
+                                <i class="fas fa-arrow-left"></i>
+                                Continue Shopping
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="empty-cart-container" style="text-align: center; padding: var(--spacing-xl) 0; min-height: 60vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <div class="empty-cart-icon" style="width: 150px; height: 150px; border-radius: 50%; background: var(--matte-black); display: flex; align-items: center; justify-content: center; margin-bottom: var(--spacing-lg); box-shadow: var(--shadow-luxury);">
+                    <i class="fas fa-shopping-cart" style="font-size: 4rem; color: var(--gold);"></i>
+                </div>
+                <h2 class="empty-cart-title" style="font-family: var(--font-primary); font-size: 2rem; font-weight: 700; color: var(--light-gray); margin-bottom: var(--spacing-sm);">Your Cart is Empty</h2>
+                <p class="empty-cart-text" style="font-family: var(--font-secondary); font-size: 1.1rem; color: var(--soft-gray); margin-bottom: var(--spacing-lg); max-width: 500px;">Discover our exquisite collection of luxury timepieces and add your favorite watches to the cart</p>
+                <a href="@Url.Action("Index", "Home")" class="luxury-cta-button">
+                    <i class="fas fa-gem me-2"></i>
+                    Explore Collection
+                    <i class="fas fa-arrow-right ms-2"></i>
+                </a>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function incrementQuantity(cartItemId, currentQty, maxQty) {
+            if (currentQty < maxQty) {
+                updateCart(cartItemId, currentQty + 1);
+            } else {
+                showNotification('Maximum stock reached', 'warning');
+            }
+        }
+        
+        function decrementQuantity(cartItemId, currentQty) {
+            if (currentQty > 1) {
+                updateCart(cartItemId, currentQty - 1);
+            }
+        }
+        
+        function updateCart(cartItemId, quantity) {
+            var $item = $('[data-item-id="' + cartItemId + '"]');
+            $item.css('opacity', '0.6');
+            
+            $.post('@Url.Action("Update", "Cart")', { cartItemId: cartItemId, quantity: quantity }, function(result) {
+                if (result.success) {
+                    location.reload();
+                } else {
+                    $item.css('opacity', '1');
+                    showNotification(result.message || 'Failed to update cart', 'error');
+                }
+            }).fail(function() {
+                $item.css('opacity', '1');
+                showNotification('An error occurred. Please try again.', 'error');
+            });
+        }
+        
+        function removeFromCart(cartItemId) {
+            if (confirm('Remove this item from your cart?')) {
+                var $item = $('[data-item-id="' + cartItemId + '"]');
+                
+                $item.css({
+                    'transform': 'translateX(100%)',
+                    'opacity': '0',
+                    'transition': 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+                });
+                
+                setTimeout(function() {
+                    $.post('@Url.Action("Remove", "Cart")', { cartItemId: cartItemId }, function(result) {
+                        if (result.success) {
+                            showNotification('Item removed from cart', 'success');
+                            setTimeout(function() {
+                                location.reload();
+                            }, 1000);
+                        } else {
+                            $item.css({ 'transform': 'translateX(0)', 'opacity': '1' });
+                            showNotification(result.message || 'Failed to remove item', 'error');
+                        }
+                    }).fail(function() {
+                        $item.css({ 'transform': 'translateX(0)', 'opacity': '1' });
+                        showNotification('An error occurred. Please try again.', 'error');
+                    });
+                }, 400);
+            }
+        }
+        
+        function moveToWishlist(productId, cartItemId) {
+            var $item = $('[data-item-id="' + cartItemId + '"]');
+            $item.css('opacity', '0.6');
+            
+            $.post('@Url.Action("Add", "Wishlist")', { productId: productId }, function(wishlistResult) {
+                if (wishlistResult.success) {
+                    $.post('@Url.Action("Remove", "Cart")', { cartItemId: cartItemId }, function(cartResult) {
+                        if (cartResult.success) {
+                            showNotification('Moved to wishlist successfully!', 'success');
+                            setTimeout(function() {
+                                location.reload();
+                            }, 1000);
+                        } else {
+                            $item.css('opacity', '1');
+                            showNotification('Failed to remove from cart', 'error');
+                        }
+                    });
+                } else {
+                    $item.css('opacity', '1');
+                    showNotification(wishlistResult.message || 'Failed to add to wishlist', 'error');
+                }
+            }).fail(function() {
+                $item.css('opacity', '1');
+                showNotification('An error occurred. Please try again.', 'error');
+            });
+        }
+        
+        function showNotification(message, type) {
+            // Create notification container if it doesn't exist
+            if (!$('.ios-notification-container').length) {
+                $('body').append('<div class="ios-notification-container"></div>');
+            }
+            
+            // Determine icon based on type
+            var icon = '';
+            var title = '';
+            switch(type) {
+                case 'success':
+                    icon = '<i class="fas fa-check-circle"></i>';
+                    title = 'Success';
+                    break;
+                case 'error':
+                    icon = '<i class="fas fa-times-circle"></i>';
+                    title = 'Error';
+                    break;
+                case 'warning':
+                    icon = '<i class="fas fa-exclamation-triangle"></i>';
+                    title = 'Warning';
+                    break;
+                default:
+                    icon = '<i class="fas fa-bell"></i>';
+                    title = 'Notification';
+            }
+            
+            // Create notification HTML
+            var notification = $('<div>')
+                .addClass('ios-notification ' + type)
+                .html(`
+                    <div class="ios-notification-content">
+                        <div class="ios-notification-icon">
+                            ${icon}
+                        </div>
+                        <div class="ios-notification-text">
+                            <div class="ios-notification-title">${title}</div>
+                            <div class="ios-notification-message">${message}</div>
+                        </div>
+                    </div>
+                    <div class="ios-notification-progress">
+                        <div class="ios-notification-progress-bar"></div>
+                    </div>
+                `);
+            
+            // Add to container
+            $('.ios-notification-container').append(notification);
+            
+            // Trigger show animation
+            setTimeout(function() {
+                notification.addClass('show haptic');
+            }, 10);
+            
+            // Remove haptic class
+            setTimeout(function() {
+                notification.removeClass('haptic');
+            }, 300);
+            
+            // Auto hide after 3 seconds
+            setTimeout(function() {
+                notification.removeClass('show').addClass('hide');
+                setTimeout(function() {
+                    notification.remove();
+                    if (!$('.ios-notification-container').children().length) {
+                        $('.ios-notification-container').remove();
+                    }
+                }, 300);
+            }, 3000);
+        }
+        
+        $(document).ready(function() {
+            $('.luxury-cart-item').each(function(index) {
+                $(this).css({
+                    'opacity': '0',
+                    'transform': 'translateY(30px)'
+                });
+                
+                setTimeout(function(element) {
+                    $(element).css({
+                        'opacity': '1',
+                        'transform': 'translateY(0)',
+                        'transition': 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
+                    });
+                }, index * 100, this);
+            });
+        });
+    </script>
+}

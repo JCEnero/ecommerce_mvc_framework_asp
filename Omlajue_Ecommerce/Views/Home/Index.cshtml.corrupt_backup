@@ -1,0 +1,436 @@
+﻿@model Omlajue_Ecommerce.Models.ViewModels.HomeViewModel
+@{
+    ViewBag.Title = "Home";
+    var isLoggedIn = Model.IsLoggedIn;
+}
+
+@if (!isLoggedIn)
+{
+    <!-- Hero Section for Guest Users -->
+    <section class="hero-section" style="background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); position: relative; min-height: 68vh; display: flex; align-items: center; justify-content: center;">
+        <div class="hero-overlay" style="position: absolute; inset: 0; background: url('/Content/images/banners/watchbg.png') center/cover; opacity: 0.75;"></div>
+        <div class="container position-relative" style="z-index: 10;">
+            <div class="row align-items-center">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="hero-title mb-3" style="font-size: 3.75rem; font-weight: 700; color: #ffffff; letter-spacing: -0.01em;">
+                        Timeless Elegance
+                    </h1>
+                    <p class="hero-subtitle mb-4" style="font-size: 1.1rem; color: #b0b0b0; font-weight: 400; letter-spacing: 0.02em; max-width: 600px; margin: 0 auto;">
+                        Explore the Craft, Legacy, and Excellence of World-Class Timepieces
+                    </p>
+                    <a href="@Url.Action("Login", "Account")" class="btn btn-primary btn-lg px-4 py-2" style="border-radius: 6px; font-weight: 500; letter-spacing: 0.3px; font-size: 1rem;">
+                        See Collection
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Brands Section -->
+    <section class="py-5" style="background: #0d0d0d;">
+        <div class="container">
+            <div class="text-center mb-4">
+                <h2 style="font-size: 1.65rem; font-weight: 500; color: #ffffff; margin-bottom: 0.5rem; letter-spacing: 0.02em;">
+                    Popular Brands
+                </h2>
+            </div>
+            
+            @if (Model.Brands != null && Model.Brands.Any())
+            {
+                <div class="row g-2 mb-3">
+                    @foreach (var brand in Model.Brands.Take(12))
+                    {
+                        <div class="col-lg-2 col-md-3 col-sm-4 col-6">
+                            <a href="@Url.Action("Login", "Account")" 
+                               class="brand-pill d-block text-center py-2 px-3" 
+                               style="background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 6px; color: #e0e0e0; text-decoration: none; transition: all 0.3s ease; font-weight: 400; letter-spacing: 0.3px; font-size: 0.9rem;">
+                                @brand.BrandName
+                            </a>
+                        </div>
+                    }
+                </div>
+            }
+            
+            <div class="text-center mt-3">
+                <a href="@Url.Action("Login", "Account")" class="btn btn-outline-light px-4 py-2" style="border-radius: 6px; font-weight: 400; letter-spacing: 0.3px; border-width: 1px; font-size: 0.95rem;">
+                    Display All Brands
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Most Popular Models Section for Guest Users -->
+    <section class="py-5" style="background: #0d0d0d;">
+        <div class="container">
+            <div class="text-center mb-4">
+                <h2 style="font-size: 1.65rem; font-weight: 500; color: #ffffff; margin-bottom: 0.5rem; letter-spacing: 0.02em;">
+                    Our Most Popular Models
+                </h2>
+            </div>
+            
+            <div class="row g-3">
+                @if (Model.FeaturedProducts != null && Model.FeaturedProducts.Any())
+                {
+                    foreach (var product in Model.FeaturedProducts)
+                    {
+                        var primaryImage = product.ProductImages.FirstOrDefault(i => i.IsPrimary)?.ImageUrl ?? "/Content/images/placeholder-watch.jpg";
+                        
+                        <div class="col-lg-3 col-md-6">
+                            <div class="model-card" style="background: #0f0f0f; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.5); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); height: 100%; position: relative;">
+                                <a href="@Url.Action("Login", "Account")" style="text-decoration: none; color: inherit; display: block;">
+                                    <div class="model-image" style="position: relative; overflow: hidden; aspect-ratio: 1; background: #080808; padding: 30px;">
+                                        <div style="position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+                                            <img src="@primaryImage" alt="@product.ProductName" 
+                                                 style="max-width: 85%; max-height: 85%; object-fit: contain; transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); filter: brightness(0.9);">
+                                        </div>
+                                    </div>
+                                    <div class="model-info p-3" style="background: #0f0f0f; transition: background 0.3s ease;">
+                                        <div class="model-brand mb-1" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: #888; font-weight: 500;">
+                                            @product.Brand.BrandName
+                                        </div>
+                                        <h5 class="model-name" style="font-size: 1rem; font-weight: 500; color: #ffffff; line-height: 1.3; min-height: 2.4rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                                            @product.ProductName
+                                        </h5>
+                                    </div>
+                                </a>
+                                <div class="card-overlay" style="position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 100%); opacity: 0; transition: opacity 0.4s ease; pointer-events: none;"></div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Indicators Section -->
+    <section class="trust-section py-5" style="background: #0d0d0d;">
+        <div class="container">
+            <div class="text-center mb-4">
+                <h2 style="font-size: 1.65rem; font-weight: 500; color: #ffffff; margin-bottom: 0.5rem; letter-spacing: 0.02em;">
+                    The Leading Marketplace for Luxury Watches Since 2003
+                </h2>
+            </div>
+            <div class="row g-3">
+                <div class="col-lg-3 col-md-6">
+                    <div class="trust-card text-center p-3" style="background: #1a1a1a; border-radius: 10px; height: 100%; transition: all 0.3s ease;">
+                        <div class="trust-icon mb-2" style="font-size: 2.2rem; color: #ffffff;">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h3 class="trust-number" style="font-size: 1.35rem; font-weight: 600; color: #ffffff; margin-bottom: 0.25rem;">4.7 out of 5 stars</h3>
+                        <p class="trust-text" style="color: #888; margin: 0; font-size: 0.85rem;">from 186,000 reviews worldwide</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="trust-card text-center p-3" style="background: #1a1a1a; border-radius: 10px; height: 100%; transition: all 0.3s ease;">
+                        <div class="trust-icon mb-2" style="font-size: 2.2rem; color: #ffffff;">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3 class="trust-number" style="font-size: 1.35rem; font-weight: 600; color: #ffffff; margin-bottom: 0.25rem;">9 million</h3>
+                        <p class="trust-text" style="color: #888; margin: 0; font-size: 0.85rem;">watch enthusiasts use Omlajue each month</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="trust-card text-center p-3" style="background: #1a1a1a; border-radius: 10px; height: 100%; transition: all 0.3s ease;">
+                        <div class="trust-icon mb-2" style="font-size: 2.2rem; color: #ffffff;">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3 class="trust-number" style="font-size: 1.35rem; font-weight: 600; color: #ffffff; margin-bottom: 0.25rem;">Over 200,000</h3>
+                        <p class="trust-text" style="color: #888; margin: 0; font-size: 0.85rem;">customers choose Buyer Protection annually</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="trust-card text-center p-3" style="background: #1a1a1a; border-radius: 10px; height: 100%; transition: all 0.3s ease;">
+                        <div class="trust-icon mb-2" style="font-size: 2.2rem; color: #ffffff;">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h3 class="trust-number" style="font-size: 1.35rem; font-weight: 600; color: #ffffff; margin-bottom: 0.25rem;">More than 25,000</h3>
+                        <p class="trust-text" style="color: #888; margin: 0; font-size: 0.85rem;">trustworthy sellers</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us Section -->
+    <section class="py-5" style="background: #0d0d0d;">
+        <div class="container">
+            <div class="text-center mb-4">
+                <h2 style="font-size: 1.65rem; font-weight: 500; color: #ffffff; margin-bottom: 0.5rem; letter-spacing: 0.02em;">
+                    Why Choose Omlajue
+                </h2>
+            </div>
+            
+            <div class="row g-3">
+                <div class="col-lg-3 col-md-6">
+                    <div class="feature-card text-center p-3" style="background: #1a1a1a; border-radius: 10px; height: 100%; transition: all 0.3s ease;">
+                        <div class="feature-icon mb-2" style="width: 65px; height: 65px; border-radius: 50%; background: #2a2a2a; color: #ffffff; display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 1.6rem;">
+                            <i class="fas fa-certificate"></i>
+                        </div>
+                        <h5 class="feature-title mb-2" style="font-size: 1.05rem; font-weight: 500; color: #ffffff;">100% Authentic</h5>
+                        <p class="feature-text" style="color: #888; margin: 0; font-size: 0.85rem;">Every timepiece is verified for authenticity</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="feature-card text-center p-3" style="background: #1a1a1a; border-radius: 10px; height: 100%; transition: all 0.3s ease;">
+                        <div class="feature-icon mb-2" style="width: 65px; height: 65px; border-radius: 50%; background: #2a2a2a; color: #ffffff; display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 1.6rem;">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h5 class="feature-title mb-2" style="font-size: 1.05rem; font-weight: 500; color: #ffffff;">Buyer Protection</h5>
+                        <p class="feature-text" style="color: #888; margin: 0; font-size: 0.85rem;">Your purchase is protected and insured</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="feature-card text-center p-3" style="background: #1a1a1a; border-radius: 10px; height: 100%; transition: all 0.3s ease;">
+                        <div class="feature-icon mb-2" style="width: 65px; height: 65px; border-radius: 50%; background: #2a2a2a; color: #ffffff; display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 1.6rem;">
+                            <i class="fas fa-shipping-fast"></i>
+                        </div>
+                        <h5 class="feature-title mb-2" style="font-size: 1.05rem; font-weight: 500; color: #ffffff;">Secure Shipping</h5>
+                        <p class="feature-text" style="color: #888; margin: 0; font-size: 0.85rem;">Fast and insured worldwide delivery</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="feature-card text-center p-3" style="background: #1a1a1a; border-radius: 10px; height: 100%; transition: all 0.3s ease;">
+                        <div class="feature-icon mb-2" style="width: 65px; height: 65px; border-radius: 50%; background: #2a2a2a; color: #ffffff; display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 1.6rem;">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <h5 class="feature-title mb-2" style="font-size: 1.05rem; font-weight: 500; color: #ffffff;">Expert Support</h5>
+                        <p class="feature-text" style="color: #888; margin: 0; font-size: 0.85rem;">Professional assistance from watch specialists</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA for Guest Users -->
+    <section class="cta-section py-5" style="background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 100%);">
+        <div class="container">
+            <div class="text-center py-4">
+                <h2 class="mb-3" style="font-size: 1.85rem; font-weight: 600; color: #ffffff;">
+                    Join Omlajue Today
+                </h2>
+                <p class="mb-4" style="font-size: 1rem; color: #888; max-width: 600px; margin: 0 auto;">
+                    Get access to exclusive prices, save your favorites, and connect with trusted sellers
+                </p>
+                <div class="d-flex gap-2 justify-content-center flex-wrap">
+                    <a href="@Url.Action("Register", "Account")" class="btn btn-primary px-4 py-2" style="border-radius: 6px; font-weight: 500; letter-spacing: 0.3px; font-size: 0.95rem;">
+                        <i class="fas fa-user-plus me-2"></i>Create Account
+                    </a>
+                    <a href="@Url.Action("Login", "Account")" class="btn btn-outline-light px-4 py-2" style="border-radius: 6px; font-weight: 500; letter-spacing: 0.3px; border-width: 1px; font-size: 0.95rem;">
+                        <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+}
+else
+{
+    <!-- LOGGED IN USER - FULL PRODUCT CATALOG WITH FILTERS -->
+    
+    <!-- Top Info Bar - Above Everything -->
+    <section class="top-info-bar" style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); padding: 10px 0; border-bottom: 2px solid #ff6b6b;">
+        <div class="container">
+            <div class="row align-items-center text-center text-md-start">
+                <div class="col-md-4 mb-2 mb-md-0">
+                    <div class="info-item d-flex align-items-center justify-content-center justify-content-md-start">
+                        <i class="fas fa-shipping-fast me-2" style="font-size: 1.1rem; color: #ffffff;"></i>
+                        <span style="color: #ffffff; font-size: 0.9rem; font-weight: 600; letter-spacing: 0.3px;">FREE SHIPPING WORLDWIDE</span>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-2 mb-md-0">
+                    <div class="info-item d-flex align-items-center justify-content-center">
+                        <i class="fas fa-percentage me-2" style="font-size: 1.1rem; color: #ffffff;"></i>
+                        <span style="color: #ffffff; font-size: 0.9rem; font-weight: 600; letter-spacing: 0.3px;">UP TO 40% OFF</span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="info-item d-flex align-items-center justify-content-center justify-content-md-end">
+                        <i class="fas fa-clock me-2" style="font-size: 1.1rem; color: #ffffff;"></i>
+                        <span style="color: #ffffff; font-size: 0.9rem; font-weight: 600; letter-spacing: 0.3px;">LIMITED TIME OFFER</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Sales Hero Section - Modern E-commerce Style -->
+    <section class="sales-hero-section" style="background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 100%); position: relative; min-height: 65vh; display: flex; align-items: center; overflow: hidden;">
+        <!-- Background Gradient Overlay -->
+        <div class="hero-gradient-overlay" style="position: absolute; inset: 0; background: linear-gradient(to right, rgba(13, 13, 13, 0.85) 0%, rgba(13, 13, 13, 0.3) 50%, rgba(13, 13, 13, 0.85) 100%); z-index: 1;"></div>
+        
+        <div class="container position-relative" style="z-index: 10;">
+            <div class="row align-items-center">
+                <!-- Left Side - Content -->
+                <div class="col-lg-6 col-md-12 mb-4 mb-lg-0">
+                    <div class="hero-content text-center text-lg-start">
+                        <!-- Badge -->
+                        <div class="sale-badge mb-3">
+                            <span style="display: inline-block; background: rgba(220, 53, 69, 0.15); color: #ff6b6b; padding: 8px 20px; border-radius: 50px; font-size: 0.85rem; font-weight: 700; letter-spacing: 1.5px; border: 2px solid #dc3545;">
+                                SPECIAL OFFER
+                            </span>
+                        </div>
+                        
+                        <!-- Main Heading -->
+                        <h1 class="hero-sale-title mb-3" style="font-size: 3.2rem; font-weight: 800; color: #ffffff; line-height: 1.15; text-shadow: 2px 2px 8px rgba(0,0,0,0.5);">
+                            Luxury Watches<br/>
+                            <span style="background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-shadow: none;">At Unbeatable Prices</span>
+                        </h1>
+                        
+                        <!-- Subheading -->
+                        <p class="hero-sale-subtitle mb-4" style="font-size: 1.1rem; color: #b0b0b0; max-width: 480px; line-height: 1.6; margin-left: auto; margin-right: auto; text-align: inherit;">
+                            Discover premium timepieces from the world's most prestigious brands. Limited stock available!
+                        </p>
+                        
+                        <!-- Features List -->
+                        <div class="hero-features mb-4" style="display: inline-block; text-align: left;">
+                            <div class="d-flex align-items-center mb-2">
+                                <div style="width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #28a745 0%, #20c997 100%); display: flex; align-items: center; justify-content: center; margin-right: 12px;">
+                                    <i class="fas fa-check" style="color: #ffffff; font-size: 0.75rem;"></i>
+                                </div>
+                                <span style="color: #e0e0e0; font-size: 0.95rem; font-weight: 500;">100% Authentic Guarantee</span>
+                            </div>
+                            <div class="d-flex align-items-center mb-2">
+                                <div style="width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #28a745 0%, #20c997 100%); display: flex; align-items: center; justify-content: center; margin-right: 12px;">
+                                    <i class="fas fa-check" style="color: #ffffff; font-size: 0.75rem;"></i>
+                                </div>
+                                <span style="color: #e0e0e0; font-size: 0.95rem; font-weight: 500;">Free Express Shipping</span>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <div style="width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #28a745 0%, #20c997 100%); display: flex; align-items: center; justify-content: center; margin-right: 12px;">
+                                    <i class="fas fa-check" style="color: #ffffff; font-size: 0.75rem;"></i>
+                                </div>
+                                <span style="color: #e0e0e0; font-size: 0.95rem; font-weight: 500;">30-Day Money Back</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Side - Product Image with CTA -->
+                <div class="col-lg-6 col-md-12">
+                    <div class="hero-watch-showcase text-center position-relative">
+                        <!-- Main Product Image -->
+                        <div class="product-image-container" style="position: relative; max-width: 550px; margin: 0 auto;">
+                            <img src="/Content/images/11.png" alt="Luxury Watch" style="width: 100%; height: auto; max-width: 100%; object-fit: contain; filter: drop-shadow(0 20px 50px rgba(0,0,0,0.6));">
+                            
+                            <!-- Discount Badge on Image -->
+                            <div class="discount-badge" style="position: absolute; top: 20px; right: 20px; background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); color: #ffffff; padding: 15px 20px; border-radius: 15px; font-weight: 800; font-size: 1.5rem; box-shadow: 0 8px 25px rgba(220, 53, 69, 0.6); border: 3px solid #ffffff;">
+                                <div style="line-height: 1.2;">
+                                    <div style="font-size: 2rem;">-40%</div>
+                                    <div style="font-size: 0.7rem; font-weight: 600; letter-spacing: 1px;">OFF</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Buy Now Button on Image -->
+                            <div class="cta-button-container" style="position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px;">
+                                <a href="#products-section" class="btn btn-lg w-100" style="background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%); color: #000000; border: none; padding: 18px 40px; border-radius: 50px; font-weight: 800; letter-spacing: 1px; box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4); transition: all 0.3s ease; text-decoration: none; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;">
+                                    <i class="fas fa-shopping-bag me-2" style="font-size: 1.2rem;"></i>
+                                    <span>BUY NOW - 40% OFF</span>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- Decorative Elements -->
+                        <div class="decorative-circle" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(255, 215, 0, 0.08) 0%, transparent 70%); z-index: -1; pointer-events: none;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filter Section -->
+    <section id="products-section" class="filter-section py-4" style="background: #0d0d0d; border-bottom: 1px solid #1a1a1a;">
+        <div class="container">
+            <form method="get" action="@Url.Action("Index", "Home")" id="filterForm">
+                <div class="row g-3 align-items-end">
+                    <!-- Search -->
+                    <div class="col-lg-3 col-md-6">
+                        <label style="font-size: 0.85rem; color: #888; margin-bottom: 0.5rem; display: block;">Search</label>
+                        <input type="text" name="search" value="@Model.SearchQuery" class="form-control" placeholder="Search products..." 
+                               style="background: #1a1a1a; border: 1px solid #2a2a2a; color: #e0e0e0; border-radius: 6px; padding: 8px 12px;">
+                    </div>
+                    
+                    <!-- Brand Filter -->
+                    <div class="col-lg-2 col-md-6">
+                        <label style="font-size: 0.85rem; color: #888; margin-bottom: 0.5rem; display: block;">Brand</label>
+                        <select name="brandId" class="form-control" style="background: #1a1a1a; border: 1px solid #2a2a2a; color: #e0e0e0; border-radius: 6px; padding: 8px 12px;">
+                            <option value="">All Brands</option>
+                            @foreach (var brand in Model.Brands)
+                            {
+                                <option value="@brand.BrandId" @(Model.SelectedBrandId == brand.BrandId ? "selected" : "")>@brand.BrandName</option>
+                            }
+                        </select>
+                    </div>
+                    
+                    <!-- Category Filter -->
+                    <div class="col-lg-2 col-md-6">
+                        <label style="font-size: 0.85rem; color: #888; margin-bottom: 0.5rem; display: block;">Category</label>
+                        <select name="categoryId" class="form-control" style="background: #1a1a1a; border: 1px solid #2a2a2a; color: #e0e0e0; border-radius: 6px; padding: 8px 12px;">
+                            <option value="">All Categories</option>
+                            @foreach (var category in Model.Categories)
+                            {
+                                <option value="@category.CategoryId" @(Model.SelectedCategoryId == category.CategoryId ? "selected" : "")>@category.CategoryName</option>
+                            }
+                        </select>
+                    </div>
+                    
+                    <!-- Gender Filter -->
+                    <div class="col-lg-2 col-md-6">
+                        <label style="font-size: 0.85rem; color: #888; margin-bottom: 0.5rem; display: block;">Gender</label>
+                        <select name="gender" class="form-control" style="background: #1a1a1a; border: 1px solid #2a2a2a; color: #e0e0e0; border-radius: 6px; padding: 8px 12px;">
+                            <option value="">All</option>
+                            <option value="Men" @(Model.SelectedGender == "Men" ? "selected" : "")>Men</option>
+                            <option value="Women" @(Model.SelectedGender == "Women" ? "selected" : "")>Women</option>
+                            <option value="Unisex" @(Model.SelectedGender == "Unisex" ? "selected" : "")>Unisex</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Sort By -->
+                    <div class="col-lg-2 col-md-6">
+                        <label style="font-size: 0.85rem; color: #888; margin-bottom: 0.5rem; display: block;">Sort By</label>
+                        <select name="sortBy" class="form-control" style="background: #1a1a1a; border: 1px solid #2a2a2a; color: #e0e0e0; border-radius: 6px; padding: 8px 12px;">
+                            <option value="newest" @(Model.SortBy == "newest" ? "selected" : "")>Newest</option>
+                            <option value="price-asc" @(Model.SortBy == "price-asc" ? "selected" : "")>Price: Low to High</option>
+                            <option value="price-desc" @(Model.SortBy == "price-desc" ? "selected" : "")>Price: High to Low</option>
+                            <option value="name" @(Model.SortBy == "name" ? "selected" : "")>Name A-Z</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Filter Button -->
+                    <div class="col-lg-1 col-md-6">
+                        <button type="submit" class="btn btn-primary w-100" style="border-radius: 6px; padding: 8px 12px;">
+                            <i class="fas fa-filter"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Price Range -->
+                <div class="row g-3 mt-2">
+                    <div class="col-lg-2 col-md-6">
+                        <label style="font-size: 0.85rem; color: #888; margin-bottom: 0.5rem; display: block;">Min Price</label>
+                        <input type="number" name="minPrice" value="@Model.MinPrice" class="form-control" placeholder="₱0" 
+                               style="background: #1a1a1a; border: 1px solid #2a2a2a; color: #e0e0e0; border-radius: 6px; padding: 8px 12px;">
+                    </div>
+                    <div class="col-lg-2 col-md-6">
+                        <label style="font-size: 0.85rem; color: #888; margin-bottom: 0.5rem; display: block;">Max Price</label>
+                        <input type="number" name="maxPrice" value="@Model.MaxPrice" class="form-control" placeholder="₱999,999" 
+                               style="background: #1a1a1a; border: 1px solid #2a2a2a; color: #e0e0e0; border-radius: 6px; padding: 8px 12px;">
+                    </div>
+                    <div class="col-lg-2 col-md-6 d-flex align-items-end">
+                        <a href="@Url.Action("Index", "Home")" class="btn btn-outline-light w-100" style="border-radius: 6px; padding: 8px 12px;">
+                            <i class="fas fa-redo me-1"></i>Clear Filters
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Products Grid Section -->
+    <section class="py-5" style="background: #0d0d0d;">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 style="font-size: 1.65rem; font-weight: 500; color: #ffffff; margin: 0; letter-spacing: 0.02em;">
+                    All Watches
+                </h2>
+                <span style="color: #888; font-size: 0.95rem;">
+                    @(Model.AllProducts?.Count ��

@@ -1,0 +1,380 @@
+/* Premium Product List Page Styling */
+.product-list-page-wrapper {
+    background: #0d0d0d;
+    min-height: calc(100vh - 80px);
+    padding: 60px 0;
+}
+
+.product-list-page-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: #ffffff;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 3rem;
+    text-align: center;
+    position: relative;
+}
+
+.product-list-page-title::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #c9a961, transparent);
+}
+
+/* Filter Sidebar */
+.filter-sidebar {
+    background: linear-gradient(135deg, #1a1a1a 0%, #141414 100%);
+    border-radius: 16px;
+    padding: 30px;
+    border: 1px solid #252525;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+    position: sticky;
+    top: 100px;
+}
+
+.filter-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 400;
+    color: #ffffff;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #252525;
+}
+
+.filter-group {
+    margin-bottom: 25px;
+}
+
+.filter-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    color: #999;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.filter-select {
+    width: 100%;
+    padding: 12px 16px;
+    background: #0f0f0f;
+    border: 1px solid #252525;
+    border-radius: 8px;
+    color: #ffffff;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.filter-select:focus {
+    background: #1a1a1a;
+    border-color: #c9a961;
+    outline: none;
+}
+
+.filter-select option {
+    background: #1a1a1a;
+    color: #ffffff;
+}
+
+.apply-filters-btn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 50px;
+    background: linear-gradient(135deg, #c9a961 0%, #a08849 100%);
+    color: #000000;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(201, 169, 97, 0.3);
+}
+
+.apply-filters-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(201, 169, 97, 0.5);
+}
+
+/* Product Grid */
+.product-grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+}
+
+/* Product Card */
+.product-list-card {
+    background: linear-gradient(135deg, #1a1a1a 0%, #141414 100%);
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid #252525;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-list-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(201, 169, 97, 0.3), transparent);
+}
+
+.product-list-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.8);
+    border-color: #2a2a2a;
+}
+
+/* Product Image */
+.product-list-image-wrapper {
+    position: relative;
+    aspect-ratio: 1;
+    background: #0f0f0f;
+    padding: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.product-list-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    transition: transform 0.4s ease;
+}
+
+.product-list-card:hover .product-list-image {
+    transform: scale(1.15) rotate(-2deg);
+}
+
+/* Product Info */
+.product-list-info {
+    padding: 25px;
+    background: #0f0f0f;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-list-brand {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #888;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.product-list-name {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #ffffff;
+    margin-bottom: 12px;
+    line-height: 1.4;
+    min-height: 2.8rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    transition: color 0.3s ease;
+}
+
+.product-list-card:hover .product-list-name {
+    color: #c9a961;
+}
+
+/* Price */
+.product-list-price {
+    margin-bottom: 20px;
+    margin-top: auto;
+}
+
+.price-current {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #c9a961;
+    margin-right: 10px;
+}
+
+.price-original {
+    font-size: 1rem;
+    color: #666;
+    text-decoration: line-through;
+    font-weight: 400;
+}
+
+/* View Details Button */
+.view-details-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 50px;
+    background: linear-gradient(135deg, #c9a961 0%, #a08849 100%);
+    color: #000000;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(201, 169, 97, 0.3);
+}
+
+.view-details-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(201, 169, 97, 0.5);
+    text-decoration: none;
+    color: #000000;
+}
+
+/* Empty State */
+.no-products-container {
+    text-align: center;
+    padding: 80px 20px;
+    background: linear-gradient(135deg, #1a1a1a 0%, #141414 100%);
+    border-radius: 16px;
+    border: 1px solid #252525;
+    grid-column: 1 / -1;
+}
+
+.no-products-icon {
+    font-size: 5rem;
+    color: #2a2a2a;
+    margin-bottom: 30px;
+}
+
+.no-products-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.8rem;
+    color: #ffffff;
+    font-weight: 400;
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+}
+
+.no-products-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    color: #666;
+}
+
+/* Pagination */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+}
+
+.pagination {
+    display: flex;
+    gap: 10px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.page-item {
+    margin: 0;
+}
+
+.page-link {
+    padding: 10px 18px;
+    background: #1a1a1a;
+    border: 1px solid #252525;
+    border-radius: 8px;
+    color: #ffffff;
+    text-decoration: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.page-link:hover {
+    background: #2a2a2a;
+    border-color: #c9a961;
+    color: #c9a961;
+    text-decoration: none;
+}
+
+.page-item.active .page-link {
+    background: linear-gradient(135deg, #c9a961 0%, #a08849 100%);
+    border-color: #c9a961;
+    color: #000000;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .filter-sidebar {
+        position: static;
+        margin-bottom: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .product-list-page-title {
+        font-size: 2rem;
+        margin-bottom: 2rem;
+    }
+    
+    .product-grid-container {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 15px;
+    }
+    
+    .filter-sidebar {
+        padding: 20px;
+    }
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.product-list-card {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+.product-list-card:nth-child(1) { animation-delay: 0.1s; }
+.product-list-card:nth-child(2) { animation-delay: 0.2s; }
+.product-list-card:nth-child(3) { animation-delay: 0.3s; }
+.product-list-card:nth-child(4) { animation-delay: 0.4s; }
+.product-list-card:nth-child(5) { animation-delay: 0.5s; }
+.product-list-card:nth-child(6) { animation-delay: 0.6s; }

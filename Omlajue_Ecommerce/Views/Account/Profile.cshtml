@@ -1,0 +1,22 @@
+@model Omlajue_Ecommerce.Models.User
+@{
+    ViewBag.Title = "My Profile";
+}
+
+<div class="container mt-4">
+    <h2>My Profile</h2>
+    
+    <div class="card">
+        <div class="card-body">
+            <p><strong>Name:</strong> @Model.FirstName @Model.LastName</p>
+            <p><strong>Email:</strong> @Model.Email</p>
+            <p><strong>Phone:</strong> @(Model.PhoneNumber ?? "Not provided")</p>
+            <p><strong>Address:</strong> @(Model.Address ?? "Not provided")</p>
+            @if (!string.IsNullOrEmpty(Model.City))
+            {
+                <p><strong>City:</strong> @Model.City, @Model.Province @Model.PostalCode</p>
+            }
+            <p><strong>Member Since:</strong> @Model.CreatedAt.ToString("MMM dd, yyyy")</p>
+        </div>
+    </div>
+</div>
